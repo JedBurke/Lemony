@@ -17,6 +17,8 @@ VERSION = "0.3.0"
 # Todo: Use for separating the file types as well.
 PATH_SEPARATOR = ";"
 
+EXTENSION_SEPARATOR = ","
+
 # Prints certain values which the general user wouldn't need.
 debug = False
 
@@ -39,6 +41,8 @@ parser.add_argument("--debug", action="store_true")
 parser.add_argument("-m", "--match-pattern", default=None)
 parser.add_argument("-r", "--replace-pattern", default=None)
 parser.add_argument("-p", "--profile", default=None)
+parser.add_argument("-x", "--ext", default=None)
+parser.add_argument("--blacklist", action="store_true")
 
 # Todo: Implement
 # --get-profile prints the profile contents. Works as --debug, but only for the profile and 
@@ -76,6 +80,22 @@ if args["replace_pattern"] is not None:
   
   if debug:
     print(Fore.CYAN + f"Replace Pattern: {regex_replace}")
+
+if args["ext"] is not None:
+  WHITESPACE_SEPARATOR = " "
+  ext_delimiter = EXTENSION_SEPARATOR
+  
+  if EXTENSION_SEPARATOR not in args["ext"]:
+    if PATH_SEPARATOR not in args["ext"]:
+      if WHITESPACE_SEPARATOR in args["ext"]:
+        ext_delimiter = WHITESPACE_SEPARATOR
+    else:
+      ext_delimiter = PATH_SEPARATOR
+
+  file_types = args["ext"].split(ext_delimiter)
+
+  if debug:
+    print(Fore.CYAN + f"Extension List: {file_types}")
 
 if args["profile"] is not None:
   script_path = path.join(sys.path[0], "rename-profiles.json")
