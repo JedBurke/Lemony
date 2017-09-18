@@ -12,7 +12,7 @@ from colorama import init, Fore, Back, Style
 
 init(autoreset=True)
 
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 
 # Todo: Use for separating the file types as well.
 PATH_SEPARATOR = ";"
@@ -122,7 +122,12 @@ for directory in args["args"].split(PATH_SEPARATOR):
   for file in files:
     file_name = Path(file).name
 
-    # Todo: Perform match to see if the file is eligible then do the replacement.
+    # Todo: Compile regular expressions.
+
+    # Perform a search to see if the file is eligible then do the replacement.
+    # This is done not to pollute the console output.
+    if re.search(regex_pattern, file_name) == None:
+      continue
 
     new_name = re.sub(regex_pattern, regex_replace, file_name)
     new_path = join(directory, new_name)
@@ -139,7 +144,6 @@ for directory in args["args"].split(PATH_SEPARATOR):
     else:
       if debug:
         print(Fore.RED + f"{file_name}" + Fore.RESET + " -> " + Fore.GREEN + f"{new_name}")
-
 
       # Don't perform the rename if it's a dry run.
       if not dry_run:
