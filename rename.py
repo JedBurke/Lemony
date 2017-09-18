@@ -19,6 +19,8 @@ PATH_SEPARATOR = ";"
 
 EXTENSION_SEPARATOR = ","
 
+PROFILES_FILE_NAME = "profiles.json"
+
 # Prints certain values which the general user wouldn't need.
 debug = False
 
@@ -98,23 +100,30 @@ if args["ext"] is not None:
     print(Fore.CYAN + f"Extension List: {file_types}")
 
 if args["profile"] is not None:
-  script_path = path.join(sys.path[0], "rename-profiles.json")
+  # Gets the profile path relative to the script.
+  profile_path = path.join(sys.path[0], PROFILES_FILE_NAME)
 
-  with open(script_path, "r") as profile_content_file:
-    profile_content = profile_content_file.read()
+  if os.path.exists(profile_path):
+    with open(profile_path, "r") as profile_content_file:
+      profile_content = profile_content_file.read()
 
-  profiles = json.loads(profile_content)
-  profile_str = args["profile"]
+    profiles = json.loads(profile_content)
+    profile_str = args["profile"]
 
-  if not profile_str in profiles:
-    print(Fore.RED + f"Profile \"{profile_str}\" not found")
-    print(Fore.RED + "Aborting.")
+    if not profile_str in profiles:
+      print(Fore.RED + f"Profile \"{profile_str}\" not found")
+      print(Fore.RED + "Aborting.")
+      exit()
+
+    profile = profiles[profile_str]
+    regex_pattern = profile["match"]
+    regex_replace = profile["replace"]
+    file_types = profile["ext"]
+  
+  else:
+    print(Fore.RED + "The profile configuration file cannot be found.")
     exit()
 
-  profile = profiles[profile_str]
-  regex_pattern = profile["match"]
-  regex_replace = profile["replace"]
-  file_types = profile["ext"]
 
   if debug:
     print(Fore.CYAN + f"Name: \"{profile_str}\"")
