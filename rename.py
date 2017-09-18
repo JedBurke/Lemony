@@ -21,6 +21,8 @@ EXTENSION_SEPARATOR = ","
 
 PROFILES_FILE_NAME = "profiles.json"
 
+USER_DATA_DIR_NAME = "org.rename_data"
+
 # Prints certain values which the general user wouldn't need.
 debug = False
 
@@ -108,22 +110,35 @@ if args["profile"] is not None:
       profile_content = profile_content_file.read()
 
     profiles = json.loads(profile_content)
-    profile_str = args["profile"]
-
-    if not profile_str in profiles:
-      print(Fore.RED + f"Profile \"{profile_str}\" not found")
-      print(Fore.RED + "Aborting.")
-      exit()
-
-    profile = profiles[profile_str]
-    regex_pattern = profile["match"]
-    regex_replace = profile["replace"]
-    file_types = profile["ext"]
   
   else:
     print(Fore.RED + "The profile configuration file cannot be found.")
     exit()
 
+  user_config_path = path.join(path.expanduser(f"~/{USER_DATA_DIR_NAME}"), PROFILES_FILE_NAME)
+  user_config = Path(user_config_path)
+  if user_config.exists():
+    # Instead of creating the directory, check if it exists and include it should it.
+    with open(user_config_path, "r") as profile_content_file:
+      profile_content = profile_content_file.read()
+
+    user_profiles = json.loads(profile_content)
+
+    if user_profiles is not None:
+      profiles.update(user_profiles)
+
+  
+    profile_str = args["profile"]
+
+  if not profile_str in profiles:
+    print(Fore.RED + f"Profile \"{profile_str}\" not found")
+    print(Fore.RED + "Aborting.")
+    exit()
+
+  profile = profiles[profile_str]
+  regex_pattern = profile["match"]
+  regex_replace = profile["replace"]
+  file_types = profile["ext"]
 
   if debug:
     print(Fore.CYAN + f"Name: \"{profile_str}\"")
