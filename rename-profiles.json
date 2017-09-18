@@ -7,7 +7,7 @@
 	},
 	"anidl": {
 		"match": "\\[AniDL\\]\\[wat15\\](?P<name>.*)(?=\\s+-)\\s?-\\s?[0]?(?P<episode>\\d+).*(?=\\.)(?P<extension>.*)$",
-		"replace": "\\g<name> - Episode \\g<episode>\\#g<extension>",
+		"replace": "\\g<name> - Episode \\g<episode>\\g<extension>",
 		"ext": ["*.mkv", "*.mp4"]
 	},
 	"_2s": {

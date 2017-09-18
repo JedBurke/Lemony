@@ -8,8 +8,13 @@ from os.path import join
 from pathlib import Path
 import re
 import sys
+from colorama import init, Fore, Back, Style
+
+init(autoreset=True)
 
 VERSION = "0.2.0"
+
+# Todo: Use for separating the file types as well.
 PATH_SEPARATOR = ";"
 
 # Prints certain values which the general user wouldn't need.
@@ -35,6 +40,14 @@ parser.add_argument("-m", "--match-pattern", default=None)
 parser.add_argument("-r", "--replace-pattern", default=None)
 parser.add_argument("-p", "--profile", default=None)
 
+# Todo: Implement
+# --get-profile prints the profile contents. Works as --debug, but only for the profile and 
+# exits once returned.
+parser.add_argument("--get-profile")
+
+# Todo: Implement subcommands for profile settings.
+# --set-profile "subs" -m "pattern" -r "replacement" --ext "*.srt,*.ass"
+
 args = vars(parser.parse_args())
 
 if args["debug"]:
@@ -47,7 +60,7 @@ if args["dry_run"]:
   dry_run = True
 
   if debug:
-    print(f"Dry Run: {dry_run}")
+    print(Fore.CYAN + f"Dry Run: {dry_run}")
 
 if args["version"]:
   print(f"Pyren version: {VERSION}")
@@ -56,13 +69,13 @@ if args["match_pattern"] is not None:
   regex_pattern = args["match_pattern"]
 
   if debug:
-    print(f"Match Pattern: {regex_pattern}")
+    print(Fore.CYAN + f"Match Pattern: {regex_pattern}")
 
 if args["replace_pattern"] is not None:
   regex_replace = args["replace_pattern"]
   
   if debug:
-    print(f"Replace Pattern: {regex_replace}")
+    print(Fore.CYAN + f"Replace Pattern: {regex_replace}")
 
 if args["profile"] is not None:
   script_path = path.join(sys.path[0], "rename-profiles.json")
@@ -74,8 +87,8 @@ if args["profile"] is not None:
   profile_str = args["profile"]
 
   if not profile_str in profiles:
-    print(f"Profile \"{profile_str}\" not found")
-    print("Aborting.")
+    print(Fore.RED + f"Profile \"{profile_str}\" not found")
+    print(Fore.RED + "Aborting.")
     exit()
 
   profile = profiles[profile_str]
@@ -84,18 +97,22 @@ if args["profile"] is not None:
   file_types = profile["ext"]
 
   if debug:
-    print(f"Name: \"{profile_str}\"")
-    print(f"Match: \"{regex_pattern}\"")
-    print(f"Replace: \"{regex_replace}\"")
-    print(f"Available extensions: \"{file_types}\"")
+    print(Fore.CYAN + f"Name: \"{profile_str}\"")
+    print(Fore.CYAN + f"Match: \"{regex_pattern}\"")
+    print(Fore.CYAN + f"Replace: \"{regex_replace}\"")
+    print(Fore.CYAN + f"Available extensions: \"{file_types}\"")
 
 for directory in args["args"].split(PATH_SEPARATOR):
-  print(f"Entering \"{directory}\".")
+  print(Fore.CYAN + f"Entering \"{directory}\".")
 
   p = Path(directory)
 
-  if not p.is_dir():
-    print("Skipping, not a directory.")
+  if not os.path.exists(directory):
+    print(Fore.RED + "Directory does not exist.")
+    continue
+
+  elif not p.is_dir():
+    print(Fore.RED + "Skipping, not a directory.")
     continue
 
   files = []
@@ -105,15 +122,25 @@ for directory in args["args"].split(PATH_SEPARATOR):
   for file in files:
     file_name = Path(file).name
 
+    # Todo: Perform match to see if the file is eligible then do the replacement.
+
     new_name = re.sub(regex_pattern, regex_replace, file_name)
     new_path = join(directory, new_name)
 
-    if debug:
-      print(f"{file_name} -> {new_name}")
-
-    # Don't perform the rename if it's a dry run.
-    if not dry_run:
-      if not os.path.exists(new_path):
-        os.rename(file, new_path)        
+    if os.path.exists(new_path):
+      if debug:
+        print(Fore.RED + f"A file with the name of \"{new_name}\" already exists.")
+      
       else:
-        print(f"Skipping, a file with the name of \"{new_name}\" already exists.")
+        print(Fore.RED + f"A file with the target name already exists.")
+      
+      continue
+
+    else:
+      if debug:
+        print(Fore.RED + f"{file_name}" + Fore.RESET + " -> " + Fore.GREEN + f"{new_name}")
+
+
+      # Don't perform the rename if it's a dry run.
+      if not dry_run:
+          os.rename(file, new_path)
