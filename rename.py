@@ -56,52 +56,52 @@ parser.add_argument("--get-profile")
 # Todo: Implement subcommands for profile settings.
 # --set-profile "subs" -m "pattern" -r "replacement" --ext "*.srt,*.ass"
 
-args = vars(parser.parse_args())
+args = parser.parse_args()
 
-if args["debug"]:
+if args.debug:
   debug = True
 
 if debug:
-  print(args["args"])
+  print(args.args)
 
-if args["dry_run"]:
+if args.dry_run:
   dry_run = True
 
   if debug:
     print(Fore.CYAN + f"Dry Run: {dry_run}")
 
-if args["version"]:
+if args.version:
   print(f"Pyren version: {VERSION}")
 
-if args["match_pattern"] is not None:
-  regex_pattern = args["match_pattern"]
+if args.match_pattern is not None:
+  regex_pattern = args.match_pattern
 
   if debug:
     print(Fore.CYAN + f"Match Pattern: {regex_pattern}")
 
-if args["replace_pattern"] is not None:
-  regex_replace = args["replace_pattern"]
+if args.replace_pattern is not None:
+  regex_replace = args.replace_pattern
   
   if debug:
     print(Fore.CYAN + f"Replace Pattern: {regex_replace}")
 
-if args["ext"] is not None:
+if args.ext is not None:
   WHITESPACE_SEPARATOR = " "
   ext_delimiter = EXTENSION_SEPARATOR
   
-  if EXTENSION_SEPARATOR not in args["ext"]:
-    if PATH_SEPARATOR not in args["ext"]:
-      if WHITESPACE_SEPARATOR in args["ext"]:
+  if EXTENSION_SEPARATOR not in args.ext:
+    if PATH_SEPARATOR not in args.ext:
+      if WHITESPACE_SEPARATOR in args.ext:
         ext_delimiter = WHITESPACE_SEPARATOR
     else:
       ext_delimiter = PATH_SEPARATOR
 
-  file_types = args["ext"].split(ext_delimiter)
+  file_types = args.ext.split(ext_delimiter)
 
   if debug:
     print(Fore.CYAN + f"Extension List: {file_types}")
 
-if args["profile"] is not None:
+if args.profile is not None:
   # Gets the profile path relative to the script.
   profile_path = path.join(sys.path[0], PROFILES_FILE_NAME)
 
@@ -128,7 +128,7 @@ if args["profile"] is not None:
       profiles.update(user_profiles)
 
 
-    profile_str = args["profile"]
+    profile_str = args.profile
 
   if not profile_str in profiles:
     print(Fore.RED + f"Profile \"{profile_str}\" not found")
@@ -147,7 +147,7 @@ if args["profile"] is not None:
     print(Fore.CYAN + f"Replace: \"{regex_replace}\"")
     print(Fore.CYAN + f"Available extensions: \"{file_types}\"")
 
-for directory in args["args"].split(PATH_SEPARATOR):
+for directory in args.args.split(PATH_SEPARATOR):
   print(Fore.CYAN + f"Entering \"{directory}\".")
 
   p = Path(directory)
