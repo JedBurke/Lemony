@@ -6,6 +6,10 @@ This script is still in its infancy and is therefore subject to breaking or not 
 
 Rename-py is a simple batch file renaming script written in Python 3.6. Its goal is to allow users to rename their files using regular expressions.
 
+## Getting Started
+
+For now, simply download the `rename.py` file and run it with Python. As mentioned earlier, the script has been written targetting Python version 3.6.
+
 ### Usage
 
 The following is an incomplete usage guide in using the script.
@@ -69,6 +73,9 @@ Invoke as such:
 > rename.py "path/to/files" --profile _2s
 ```
 
+You may also store a separate profile.json file in "~/org.rename\_data" / "%HOMEPATH%\org.rename\_data". The values from the local file will overwrite those of the main one.
+
+
 #### Need to know more?
 
 At this point in time, the script itself is your best friend in knowing how to use it.
@@ -94,4 +101,4 @@ The script was shoddily written with below-novice proficiency in Python. Ideally
 
 ## Bugs
 
-I would appreciate any bug reports if it doesn't work as expected.
+While I am only able to test on Windows, I would appreciate any bug reports if it doesn't work as expected.

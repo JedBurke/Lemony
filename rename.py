@@ -127,7 +127,7 @@ if args["profile"] is not None:
     if user_profiles is not None:
       profiles.update(user_profiles)
 
-  
+
     profile_str = args["profile"]
 
   if not profile_str in profiles:
@@ -139,6 +139,7 @@ if args["profile"] is not None:
   regex_pattern = profile["match"]
   regex_replace = profile["replace"]
   file_types = profile["ext"]
+  
 
   if debug:
     print(Fore.CYAN + f"Name: \"{profile_str}\"")
