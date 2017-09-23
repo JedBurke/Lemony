@@ -106,7 +106,7 @@ if args.profile is not None:
   profile_path = path.join(sys.path[0], PROFILES_FILE_NAME)
 
   if os.path.exists(profile_path):
-    with open(profile_path, "r") as profile_content_file:
+    with open(profile_path, encoding="utf-8", mode="r") as profile_content_file:
       profile_content = profile_content_file.read()
 
     profiles = json.loads(profile_content)
@@ -119,7 +119,7 @@ if args.profile is not None:
   user_config = Path(user_config_path)
   if user_config.exists():
     # Instead of creating the directory, check if it exists and include it should it.
-    with open(user_config_path, "r") as profile_content_file:
+    with open(user_config_path, encoding="utf-8", mode="r") as profile_content_file:
       profile_content = profile_content_file.read()
 
     user_profiles = json.loads(profile_content)
