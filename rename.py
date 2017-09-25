@@ -10,6 +10,8 @@ import re
 import sys
 from colorama import init, Fore, Back, Style
 
+from FileHelpers import *
+
 init(autoreset=True)
 
 VERSION = "0.3.1"
@@ -88,18 +90,8 @@ if args.replace_pattern is not None:
     print(Fore.CYAN + f"Replace Pattern: {regex_replace}")
 
 if args.ext is not None:
-  WHITESPACE_SEPARATOR = " "
-  ext_delimiter = EXTENSION_SEPARATOR
+  file_types = FileHelpers.parse_extensions(args.ext)
   
-  if EXTENSION_SEPARATOR not in args.ext:
-    if PATH_SEPARATOR not in args.ext:
-      if WHITESPACE_SEPARATOR in args.ext:
-        ext_delimiter = WHITESPACE_SEPARATOR
-    else:
-      ext_delimiter = PATH_SEPARATOR
-
-  file_types = args.ext.split(ext_delimiter)
-
   if debug:
     print(Fore.CYAN + f"Extension List: {file_types}")
 
