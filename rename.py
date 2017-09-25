@@ -12,7 +12,7 @@ from colorama import init, Fore, Back, Style
 
 init(autoreset=True)
 
-VERSION = "0.3.0"
+VERSION = "0.3.1"
 
 # Todo: Use for separating the file types as well.
 PATH_SEPARATOR = ";"
@@ -33,6 +33,8 @@ dry_run = False
 # variable dictates which profile is to be used.
 profile = None
 
+blacklist_ext = False
+
 regex_pattern = ""
 regex_replace = ""
 file_types = ["*"]
@@ -46,7 +48,7 @@ parser.add_argument("-m", "--match-pattern", default=None)
 parser.add_argument("-r", "--replace-pattern", default=None)
 parser.add_argument("-p", "--profile", default=None)
 parser.add_argument("-x", "--ext", default=None)
-parser.add_argument("--blacklist", action="store_true")
+parser.add_argument("--blacklist", action="store_true", default=False)
 
 # Todo: Implement
 # --get-profile prints the profile contents. Works as --debug, but only for the profile and 
@@ -101,12 +103,17 @@ if args.ext is not None:
   if debug:
     print(Fore.CYAN + f"Extension List: {file_types}")
 
+
+# Extensions mentioned in the 'ext' list are to be excluded file types.
+blacklist_ext = args.blacklist
+
+# Profiles are last since they overwrite all other arguments.
 if args.profile is not None:
   # Gets the profile path relative to the script.
   profile_path = path.join(sys.path[0], PROFILES_FILE_NAME)
 
   if os.path.exists(profile_path):
-    with open(profile_path, encoding="utf-8", mode="r") as profile_content_file:
+    with open(profile_path, encoding="utf-8-sig", mode="r") as profile_content_file:
       profile_content = profile_content_file.read()
 
     profiles = json.loads(profile_content)
@@ -119,7 +126,7 @@ if args.profile is not None:
   user_config = Path(user_config_path)
   if user_config.exists():
     # Instead of creating the directory, check if it exists and include it should it.
-    with open(user_config_path, encoding="utf-8", mode="r") as profile_content_file:
+    with open(user_config_path, encoding="utf-8-sig", mode="r") as profile_content_file:
       profile_content = profile_content_file.read()
 
     user_profiles = json.loads(profile_content)
@@ -139,13 +146,22 @@ if args.profile is not None:
   regex_pattern = profile["match"]
   regex_replace = profile["replace"]
   file_types = profile["ext"]
-  
+
+  if "whitelist" in profile:
+    blacklist_ext = not profile["whitelist"]
+
+  else:
+    blacklist_ext = False
 
   if debug:
     print(Fore.CYAN + f"Name: \"{profile_str}\"")
     print(Fore.CYAN + f"Match: \"{regex_pattern}\"")
     print(Fore.CYAN + f"Replace: \"{regex_replace}\"")
     print(Fore.CYAN + f"Available extensions: \"{file_types}\"")
+    print(Fore.CYAN + f"Whitelist extensions: {not blacklist_ext}")
+
+
+# Begin work.
 
 for directory in args.args.split(PATH_SEPARATOR):
   print(Fore.CYAN + f"Entering \"{directory}\".")
@@ -160,10 +176,32 @@ for directory in args.args.split(PATH_SEPARATOR):
     print(Fore.RED + "Skipping, not a directory.")
     continue
 
-  files = []
-  for ext in file_types:
-    files.extend(glob(join(directory, ext)))
 
+  # Gather files.
+  # Files which have types specified in the 'file_types' list will be added to the 'files' list.
+  # Conversely, if the 'blacklist' switch is active, those files will not be added, but everything 
+  # else will be added.
+  files = []
+
+  if blacklist_ext:
+    for file in os.listdir(directory):
+      f_obj = Path(os.path.join(directory, file))
+      if f_obj.is_file():
+        # Remove the leading "."" from the extension.
+        f_ext = f_obj.suffix.casefold()[1:]
+        
+        if not (f_ext) in file_types:
+          print(file)
+
+  else:
+    for ext in file_types:
+      t_ext = ext
+
+      if not ext.startswith("*."):
+        t_ext = "*." + ext
+
+      files.extend(glob(join(directory, t_ext)))
+        
   for file in files:
     file_name = Path(file).name
 

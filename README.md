@@ -12,7 +12,7 @@ For now, simply download the `rename.py` file and run it with Python. As mention
 
 ### Usage
 
-The following is an incomplete usage guide in using the script.
+The following is an incomplete guide for using the script.
 
 #### Basic
 
@@ -39,7 +39,7 @@ To supply multiple directories, separate them with the semi-colon (;) character.
 You have a directory with multiple file types and don't want to apply the replacement on all of them. Use the `--ext` option to include the file types to be renamed. To keep it simple, we're using the semi-colon to separate the files extensions.
 
 ```
-> rename "path" --ext "*.txt;*.srt,*.ass"
+> rename "path" --ext "txt;srt,ass"
 ```
 
 In the case where you wish to allow all but exclude some, you'll use the `--blacklist` flag. All files will be processed except for those mention in the `--ext` argument.
