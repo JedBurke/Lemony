@@ -11,10 +11,11 @@ import sys
 from colorama import init, Fore, Back, Style
 
 from FileHelpers import *
+from PatternHelpers import *
 
 init(autoreset=True)
 
-VERSION = "0.4.1"
+VERSION = "0.5.0"
 
 # Todo: Use for separating the file types as well.
 PATH_SEPARATOR = ";"
@@ -166,6 +167,12 @@ if args.profile is not None:
 
 # Begin work.
 
+# Verify and parse match pattern.
+regex = PatternHelpers.parse_regex(regex_pattern)
+
+if debug:
+  print(Fore.CYAN + f"Regex object: {regex}")
+
 for directory in directory_list:
   if directory == "":
     # Skip empty path. Used for profiles which contain the directory.
@@ -220,10 +227,15 @@ for directory in directory_list:
 
     # Perform a search to see if the file is eligible then do the replacement.
     # This is done not to pollute the console output.
-    if re.search(regex_pattern, file_name) == None:
+    
+    # if re.search(regex_pattern, file_name) == None:
+    #   continue
+
+    if regex.search(file_name) == None:
       continue
 
-    new_name = re.sub(regex_pattern, regex_replace, file_name)
+    #new_name = re.sub(regex_pattern, regex_replace, file_name)
+    new_name = regex.sub(regex_replace, file_name)
     new_path = join(directory, new_name)
 
     if os.path.exists(new_path):
