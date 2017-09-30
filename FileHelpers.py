@@ -1,7 +1,15 @@
 import re
 
 class FileHelpers():
-  """ Convert a string of extensions to a list using pre-defined delimiters. """
+  """ Converts a string of directories to a list using pre-defined delimiters 
+      without checking the existence of said directories. """
+  def parse_directories(directory_str, pattern = None):
+    # Todo: Use the code from parse_extensions.
+    return
+
+
+  """ Converts a string of extensions to a list 
+      using pre-defined delimiters. """
   def parse_extensions(extension_str, pattern = None):
     WHITESPACE_SEPARATOR_REGEX = "\s?"
     PATH_SEPARATOR = ";"
@@ -24,5 +32,3 @@ class FileHelpers():
     strip_regex = None
 
     return ext_list
-
-print(FileHelpers.parse_extensions("mkv, ass, srt"))

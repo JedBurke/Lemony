@@ -14,7 +14,7 @@ from FileHelpers import *
 
 init(autoreset=True)
 
-VERSION = "0.3.1"
+VERSION = "0.4.1"
 
 # Todo: Use for separating the file types as well.
 PATH_SEPARATOR = ";"
@@ -36,6 +36,9 @@ dry_run = False
 profile = None
 
 blacklist_ext = False
+
+# The list of directories which to scan for files matching the regex.
+directory_list = []
 
 regex_pattern = ""
 regex_replace = ""
@@ -61,6 +64,8 @@ parser.add_argument("--get-profile")
 # --set-profile "subs" -m "pattern" -r "replacement" --ext "*.srt,*.ass"
 
 args = parser.parse_args()
+
+directory_list = args.args.split(PATH_SEPARATOR)
 
 if args.debug:
   debug = True
@@ -139,6 +144,9 @@ if args.profile is not None:
   regex_replace = profile["replace"]
   file_types = profile["ext"]
 
+  if "dir" in profile :
+    directory_list.extend(profile["dir"])
+
   if "whitelist" in profile:
     blacklist_ext = not profile["whitelist"]
 
@@ -152,11 +160,22 @@ if args.profile is not None:
     print(Fore.CYAN + f"Available extensions: \"{file_types}\"")
     print(Fore.CYAN + f"Whitelist extensions: {not blacklist_ext}")
 
+    if "dir" in profile:
+      print(Fore.CYAN + f"Included directories: {profile['dir']}")      
+
 
 # Begin work.
 
-for directory in args.args.split(PATH_SEPARATOR):
-  print(Fore.CYAN + f"Entering \"{directory}\".")
+for directory in directory_list:
+  if directory == "":
+    # Skip empty path. Used for profiles which contain the directory.
+
+    if debug:
+      print(Fore.CYAN + "Skipping blank directory path.")
+
+    continue
+
+  print(Fore.YELLOW + f"Entering \"{directory}\":")
 
   p = Path(directory)
 
@@ -217,8 +236,7 @@ for directory in args.args.split(PATH_SEPARATOR):
       continue
 
     else:
-      if debug:
-        print(Fore.RED + f"{file_name}" + Fore.RESET + " -> " + Fore.GREEN + f"{new_name}")
+      print(Fore.RED + f"{file_name}" + Fore.RESET + " -> " + Fore.GREEN + f"{new_name}")
 
       # Don't perform the rename if it's a dry run.
       if not dry_run:
