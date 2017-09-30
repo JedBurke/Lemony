@@ -15,7 +15,7 @@ from PatternHelpers import *
 
 init(autoreset=True)
 
-VERSION = "0.5.0"
+VERSION = "0.5.1"
 
 # Todo: Use for separating the file types as well.
 PATH_SEPARATOR = ";"
@@ -71,14 +71,11 @@ directory_list = args.args.split(PATH_SEPARATOR)
 if args.debug:
   debug = True
 
-if debug:
-  print(args.args)
-
 if args.dry_run:
   dry_run = True
 
   if debug:
-    print(Fore.CYAN + f"Dry Run: {dry_run}")
+    print(Fore.CYAN + "Dry run: " + Fore.RESET + str(dry_run))
 
 if args.version:
   print(f"Pyren version: {VERSION}")
@@ -87,7 +84,10 @@ if args.match_pattern is not None:
   regex_pattern = args.match_pattern
 
   if debug:
-    print(Fore.CYAN + f"Match Pattern: {regex_pattern}")
+    print(Fore.CYAN + "Match Pattern: " + Fore.RESET + f"{regex_pattern}")
+
+  print("Check bug which gives the current path.")
+  exit()
 
 if args.replace_pattern is not None:
   regex_replace = args.replace_pattern
@@ -155,14 +155,19 @@ if args.profile is not None:
     blacklist_ext = False
 
   if debug:
-    print(Fore.CYAN + f"Name: \"{profile_str}\"")
-    print(Fore.CYAN + f"Match: \"{regex_pattern}\"")
-    print(Fore.CYAN + f"Replace: \"{regex_replace}\"")
-    print(Fore.CYAN + f"Available extensions: \"{file_types}\"")
-    print(Fore.CYAN + f"Whitelist extensions: {not blacklist_ext}")
+    # print(Fore.CYAN + f"Name: \"{profile_str}\"")
+    print(Fore.CYAN + "Name: " + Fore.RESET + profile_str)
+    # print(Fore.CYAN + f"Match: \"{regex_pattern}\"")
+    print(Fore.CYAN + "Match: "+ Fore.RESET + regex_pattern)
+    # print(Fore.CYAN + f"Replace: \"{regex_replace}\"")
+    print(Fore.CYAN + "Replace: " + Fore.RESET + regex_replace)
+    # print(Fore.CYAN + f"Available extensions: \"{file_types}\"")
+    print(Fore.CYAN + "Available extensions: " + Fore.RESET + f"{file_types}")
+    # print(Fore.CYAN + f"Whitelist extensions: {not blacklist_ext}")
+    print(Fore.CYAN + "Whitelist extensions: " + Fore.RESET + f"{not blacklist_ext}")
 
     if "dir" in profile:
-      print(Fore.CYAN + f"Included directories: {profile['dir']}")      
+      print(Fore.CYAN + f"Included directories: " + Fore.RESET + f"{profile['dir']}")      
 
 
 # Begin work.
@@ -171,7 +176,7 @@ if args.profile is not None:
 regex = PatternHelpers.parse_regex(regex_pattern)
 
 if debug:
-  print(Fore.CYAN + f"Regex object: {regex}")
+  print(Fore.CYAN + "Regex object: " + Fore.RESET + f"{regex}")
 
 for directory in directory_list:
   if directory == "":
