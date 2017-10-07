@@ -10,8 +10,7 @@ import re
 import sys
 from colorama import init, Fore, Back, Style
 
-from FileHelpers import *
-from PatternHelpers import *
+from Helpers import FileHelpers, PatternHelpers
 
 init(autoreset=True)
 
