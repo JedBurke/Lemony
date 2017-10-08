@@ -8,7 +8,7 @@ Rename-py is a simple batch file renaming script written in Python 3.6. Its goal
 
 ## Getting Started
 
-For now, simply download the `rename.py` file and run it with Python. As mentioned earlier, the script has been written targetting Python version 3.6.
+For now, clone / download the repo and run `rename.py` with Python. As mentioned earlier, the script has been written targetting Python version 3.6.
 
 ### Usage
 
@@ -24,7 +24,7 @@ What that does is rename all files in the specified directory, replacing the und
 
 #### Dry run
 
-It's a good idea to test your replacement before it happens. Use the `--dry-run` flag for this.
+It's a good idea to test your replacement before it happens. Use the `--dry-run` flag or its shortened form `-n` for this.
 
 #### Multiple directories
 
@@ -36,7 +36,7 @@ To supply multiple directories, separate them with the semi-colon (;) character.
 
 #### Extensions & Exclusions
 
-You have a directory with multiple file types and don't want to apply the replacement on all of them. Use the `--ext` option to include the file types to be renamed. To keep it simple, we're using the semi-colon to separate the files extensions.
+You have a directory with multiple file types and don't want to apply the replacement on all of them. Use the `--ext` option to include the file types to be renamed. To keep it simple, we're using the semi-colon to separate the files extensions. Notice the comma.
 
 ```
 > rename "path" --ext "txt;srt,ass"
@@ -59,7 +59,6 @@ Here is an example of the profile structure:
     "_2s": {
         "match" : "_",
         "replace": " ",
-        "ext": "*",
         "whitelist": true
     }
 }
