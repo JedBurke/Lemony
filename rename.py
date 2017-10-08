@@ -11,10 +11,11 @@ import sys
 from colorama import init, Fore, Back, Style
 
 from Helpers import FileHelpers, PatternHelpers
+from ArgumentActions import *
 
 init(autoreset=True)
 
-VERSION = "0.5.1"
+VERSION = "0.5.2"
 
 # Todo: Use for separating the file types as well.
 PATH_SEPARATOR = ";"
@@ -47,9 +48,9 @@ file_types = ["*"]
 parser = argparse.ArgumentParser(description="Rename files")
 parser.add_argument("args")
 parser.add_argument("-n", "--dry-run", action="store_true")
-parser.add_argument("--version", action="store_true")
+parser.add_argument("--version", action="version", version=f"Pyren Version: {VERSION}")
 parser.add_argument("--debug", action="store_true")
-parser.add_argument("-m", "--match-pattern", default=None)
+parser.add_argument("-m", "--match-pattern", action=MatchPatternAction)
 parser.add_argument("-r", "--replace-pattern", default=None)
 parser.add_argument("-p", "--profile", default=None)
 parser.add_argument("-x", "--ext", default=None)
@@ -76,17 +77,11 @@ if args.dry_run:
   if debug:
     print(Fore.CYAN + "Dry run: " + Fore.RESET + str(dry_run))
 
-if args.version:
-  print(f"Pyren version: {VERSION}")
-
 if args.match_pattern is not None:
   regex_pattern = args.match_pattern
 
   if debug:
-    print(Fore.CYAN + "Match Pattern: " + Fore.RESET + f"{regex_pattern}")
-
-  print("Check bug which gives the current path.")
-  exit()
+    print(Fore.CYAN + "Match Pattern: " + Fore.RESET + f"{regex_pattern.pattern}")
 
 if args.replace_pattern is not None:
   regex_replace = args.replace_pattern
@@ -144,6 +139,9 @@ if args.profile is not None:
   regex_replace = profile["replace"]
   file_types = profile["ext"]
 
+  if regex_pattern is not None:
+    regex_pattern = PatternHelpers.parse_regex(regex_pattern)
+
   if "dir" in profile :
     directory_list.extend(profile["dir"])
 
@@ -157,7 +155,7 @@ if args.profile is not None:
     # print(Fore.CYAN + f"Name: \"{profile_str}\"")
     print(Fore.CYAN + "Name: " + Fore.RESET + profile_str)
     # print(Fore.CYAN + f"Match: \"{regex_pattern}\"")
-    print(Fore.CYAN + "Match: "+ Fore.RESET + regex_pattern)
+    print(Fore.CYAN + "Match: "+ Fore.RESET + regex_pattern.pattern)
     # print(Fore.CYAN + f"Replace: \"{regex_replace}\"")
     print(Fore.CYAN + "Replace: " + Fore.RESET + regex_replace)
     # print(Fore.CYAN + f"Available extensions: \"{file_types}\"")
@@ -172,7 +170,7 @@ if args.profile is not None:
 # Begin work.
 
 # Verify and parse match pattern.
-regex = PatternHelpers.parse_regex(regex_pattern)
+regex = regex_pattern # PatternHelpers.parse_regex(regex_pattern)
 
 if debug:
   print(Fore.CYAN + "Regex object: " + Fore.RESET + f"{regex}")
