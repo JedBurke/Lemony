@@ -11,3 +11,8 @@ class MatchPatternAction(argparse.Action):
 	def __call__(self, parser, namespace, values, option_string=None):
 		values = PatternHelpers.parse_regex(values)
 		setattr(namespace, self.dest, values)
+
+
+class ParseArguments():
+	def __init__(self):
+		return
