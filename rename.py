@@ -10,8 +10,8 @@ import re
 import sys
 from colorama import init, Fore, Back, Style
 
-from Helpers import FileHelpers, PatternHelpers
-from ArgumentActions import *
+from helpers import FileHelpers, PatternHelpers
+from argument_actions import *
 
 init(autoreset=True)
 
@@ -36,6 +36,8 @@ dry_run = False
 # variable dictates which profile is to be used.
 profile = None
 
+# Indicates whether the file extensions are deliberately excluded or
+# included. Deliberately included or whitelisted, is the default.
 blacklist_ext = False
 
 # The list of directories which to scan for files matching the regex.
@@ -47,21 +49,37 @@ file_types = ["*"]
 
 parser = argparse.ArgumentParser(description="Rename files")
 parser.add_argument("args")
+
 parser.add_argument("-n",
                     "--dry-run",
                     action="store_true")
+
 parser.add_argument("--version",
                     action="version",
                     version=f"Pyren Version: {VERSION}")
+
 parser.add_argument("--debug",
                     action="store_true")
+
 parser.add_argument("-m",
                     "--match-pattern",
                     action=MatchPatternAction)
-parser.add_argument("-r", "--replace-pattern", default=None)
-parser.add_argument("-p", "--profile", default=None)
-parser.add_argument("-x", "--ext", default=None)
-parser.add_argument("--blacklist", action="store_true", default=False)
+
+parser.add_argument("-r",
+                    "--replace-pattern",
+                    default=None)
+
+parser.add_argument("-p",
+                    "--profile",
+                    default=None)
+
+parser.add_argument("-x",
+                    "--ext",
+                    default=None)
+
+parser.add_argument("--blacklist",
+                    action="store_true",
+                    default=False)
 
 args = parser.parse_args()
 
@@ -105,7 +123,9 @@ if args.profile is not None:
     profile_path = path.join(sys.path[0], PROFILES_FILE_NAME)
 
     if os.path.exists(profile_path):
-        with open(profile_path, encoding="utf-8-sig", mode="r") as profile_content_file:
+        with open(profile_path,
+                  encoding="utf-8-sig",
+                  mode="r") as profile_content_file:
             profile_content = profile_content_file.read()
 
         profiles = json.loads(profile_content)
@@ -114,12 +134,16 @@ if args.profile is not None:
         print(Fore.RED + "The profile configuration file cannot be found.")
         exit()
 
-    user_config_path = path.join(path.expanduser(f"~/{USER_DATA_DIR_NAME}"), PROFILES_FILE_NAME)
+    user_config_path = path.join(path.expanduser(f"~/{USER_DATA_DIR_NAME}"),
+                                 PROFILES_FILE_NAME)
     user_config = Path(user_config_path)
 
 if user_config.exists():
-    # Instead of creating the directory, check if it exists and include it should it.
-    with open(user_config_path, encoding="utf-8-sig", mode="r") as profile_content_file:
+    # Instead of creating the directory, check if it exists and include
+    # it should if it does.
+    with open(user_config_path,
+              encoding="utf-8-sig",
+              mode="r") as profile_content_file:
         profile_content = profile_content_file.read()
 
     user_profiles = json.loads(profile_content)
@@ -196,9 +220,9 @@ for directory in directory_list:
         continue
 
     # Gather files.
-    # Files which have types specified in the 'file_types' list will be added to the 'files' list.
-    # Conversely, if the 'blacklist' switch is active, those files will not be added, but everything
-    # else will be added.
+    # Files which have types specified in the 'file_types' list will be added
+    # to the 'files' list. Conversely, if the 'blacklist' switch is active,
+    # those files will not be added, but everything else will be added.
     files = []
 
     if blacklist_ext:
@@ -224,14 +248,8 @@ for directory in directory_list:
 for file in files:
     file_name = Path(file).name
 
-    # Todo: Compile regular expressions.
-
     # Perform a search to see if the file is eligible then do the replacement.
     # This is done not to pollute the console output.
-
-    # if re.search(regex_pattern, file_name) == None:
-    #   continue
-
     if regex.search(file_name) is None:
         continue
 
@@ -248,7 +266,9 @@ for file in files:
         continue
 
     else:
-        print(Fore.RED + f"{file_name}" + Fore.RESET + " -> " + Fore.GREEN + f"{new_name}")
+        print(Fore.RED + f"{file_name}" + Fore.RESET
+              + " -> "
+              + Fore.GREEN + f"{new_name}")
 
         # Don't perform the rename if it's a dry run.
         if not dry_run:

@@ -3,14 +3,14 @@ import re
 class FileHelpers():
   """ Converts a string of directories to a list using pre-defined delimiters 
       without checking the existence of said directories. """
-  def parse_directories(directory_str, pattern = None):
+  def parse_directories(directory_str, pattern=None):
     # Todo: Use the code from parse_extensions.
     return
 
 
   """ Converts a string of extensions to a list 
       using pre-defined delimiters. """
-  def parse_extensions(extension_str, pattern = None):
+  def parse_extensions(extension_str, pattern=None):
     WHITESPACE_SEPARATOR_REGEX = "\s?"
     PATH_SEPARATOR = ";"
     EXTENSION_SEPARATOR = ","
@@ -44,7 +44,7 @@ class PatternHelpers:
     if enable_delimiter:
       m = re.match(capture, pattern)
 
-      if m != None:      
+      if m != None:
         if m.groups("pattern"):
           parsed_pattern = m["pattern"]
 
