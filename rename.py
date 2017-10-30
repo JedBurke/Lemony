@@ -13,6 +13,8 @@ from colorama import init, Fore, Back, Style
 from helpers import FileHelpers, PatternHelpers
 from argument_actions import *
 
+from profile_subcommand import ProfileSubCommand
+
 init(autoreset=True)
 
 VERSION = "0.5.3"
@@ -42,6 +44,17 @@ blacklist_ext = False
 
 # The list of directories which to scan for files matching the regex.
 directory_list = []
+
+
+####### TODO #######
+# 1. Allow globbing the directories.
+#   path/to/ecchi/*
+#       Search in all ecchi sub-directories.
+#
+# 2. Move the default arguments to the 'rename' subcommand.
+
+####################
+
 
 regex_pattern = ""
 regex_replace = ""
@@ -80,6 +93,20 @@ parser.add_argument("-x",
 parser.add_argument("--blacklist",
                     action="store_true",
                     default=False)
+
+subparsers = parser.add_subparsers()
+
+subparsers.add_parser("rename"
+                      , help="Renames files with names matching the provided \
+                        pattern in the input directories.")
+
+ProfileSubCommand(subparsers.add_parser("profile"
+                                        , help="Provides access to profiles"))
+
+subparsers.add_parser("test"
+                      , help="Provides methods to test the match patterns \
+                        against without affecting files.")
+
 
 args = parser.parse_args()
 
