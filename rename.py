@@ -31,6 +31,8 @@ USER_DATA_DIR_NAME = "org.rename_data"
 # Prints certain values which the general user wouldn't need.
 debug = False
 
+verbose = False
+
 # If "True", dictates that the rename action is not taken.
 dry_run = False
 
@@ -94,18 +96,22 @@ parser.add_argument("--blacklist",
                     action="store_true",
                     default=False)
 
-subparsers = parser.add_subparsers()
+parser.add_argument("--verbose"
+                    ,action="store_true"
+                    ,default=False)
 
-subparsers.add_parser("rename"
-                      , help="Renames files with names matching the provided \
-                        pattern in the input directories.")
+# subparsers = parser.add_subparsers()
 
-ProfileSubCommand(subparsers.add_parser("profile"
-                                        , help="Provides access to profiles"))
+# subparsers.add_parser("rename"
+#                       , help="Renames files with names matching the provided \
+#                         pattern in the input directories.")
 
-subparsers.add_parser("test"
-                      , help="Provides methods to test the match patterns \
-                        against without affecting files.")
+# ProfileSubCommand(subparsers.add_parser("profile"
+#                                         , help="Provides access to profiles"))
+
+# subparsers.add_parser("test"
+#                       , help="Provides methods to test the match patterns \
+#                         against without affecting files.")
 
 
 args = parser.parse_args()
@@ -114,6 +120,10 @@ directory_list = args.args.split(PATH_SEPARATOR)
 
 if args.debug:
     debug = True
+
+if args.verbose:
+    debug = True
+    verbose = True
 
 if args.dry_run:
     dry_run = True
@@ -234,7 +244,7 @@ for directory in directory_list:
 
         continue
 
-    print(Fore.YELLOW + f"Entering \"{directory}\":")
+    print(Fore.YELLOW + f"\nEntering \"{directory}\":")
 
     p = Path(directory)
 
@@ -272,31 +282,39 @@ for directory in directory_list:
 
             files.extend(glob(join(directory, t_ext)))
 
-for file in files:
-    file_name = Path(file).name
+    if verbose:
+        for file in files:
+            print(Fore.CYAN + "Matching extension: " + Fore.RESET + file)
 
-    # Perform a search to see if the file is eligible then do the replacement.
-    # This is done not to pollute the console output.
-    if regex.search(file_name) is None:
-        continue
+    for file in files:
+        file_name = Path(file).name
 
-    new_name = regex.sub(regex_replace, file_name)
-    new_path = join(directory, new_name)
+        # Perform a search to see if the file is eligible then do the replacement.
+        # This is done not to pollute the console output.
+        if regex.search(file_name) is None:
+            if verbose:
+                print(Fore.CYAN + "No match: " + Fore.RESET
+                      + Fore.RED + file_name)
 
-    if os.path.exists(new_path):
-        if debug:
-            print(Fore.RED + f"A file with the name of \"{new_name}\" already exists.")
+            continue
+
+        new_name = regex.sub(regex_replace, file_name)
+        new_path = join(directory, new_name)
+
+        if os.path.exists(new_path):
+            if debug:
+                print(Fore.RED + f"A file with the name of \"{new_name}\" already exists.")
+
+            else:
+                print(Fore.RED + f"A file with the target name already exists.")
+
+            continue
 
         else:
-            print(Fore.RED + f"A file with the target name already exists.")
+            print(Fore.RED + f"{file_name}" + Fore.RESET
+                  + " -> "
+                  + Fore.GREEN + f"{new_name}")
 
-        continue
-
-    else:
-        print(Fore.RED + f"{file_name}" + Fore.RESET
-              + " -> "
-              + Fore.GREEN + f"{new_name}")
-
-        # Don't perform the rename if it's a dry run.
-        if not dry_run:
-            os.rename(file, new_path)
+            # Don't perform the rename if it's a dry run.
+            if not dry_run:
+                os.rename(file, new_path)
