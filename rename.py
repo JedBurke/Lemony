@@ -17,7 +17,11 @@ from profile_subcommand import ProfileSubCommand
 
 init(autoreset=True)
 
-VERSION = "0.5.3"
+# The name of the project.
+PRODUCT = "Lemony"
+
+# The project's current version.
+VERSION = "0.5.4"
 
 # Todo: Use for separating the file types as well.
 PATH_SEPARATOR = ";"
@@ -71,7 +75,7 @@ parser.add_argument("-n",
 
 parser.add_argument("--version",
                     action="version",
-                    version=f"Pyren Version: {VERSION}")
+                    version=f"{PRODUCT} {VERSION}")
 
 parser.add_argument("--debug",
                     action="store_true")

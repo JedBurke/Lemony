@@ -1,1 +1,4 @@
 profiles.json
+tests/*
+__pycache__/*
+
