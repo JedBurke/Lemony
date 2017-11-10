@@ -104,7 +104,7 @@ parser.add_argument("--verbose"
                     ,action="store_true"
                     ,default=False)
 
-# subparsers = parser.add_subparsers()
+subparsers = parser.add_subparsers()
 
 # subparsers.add_parser("rename"
 #                       , help="Renames files with names matching the provided \
@@ -116,6 +116,9 @@ parser.add_argument("--verbose"
 # subparsers.add_parser("test"
 #                       , help="Provides methods to test the match patterns \
 #                         against without affecting files.")
+
+subparsers.add_parser("list"
+                      , help="")
 
 
 args = parser.parse_args()
