@@ -21,7 +21,7 @@ init(autoreset=True)
 PRODUCT = "Lemony"
 
 # The project's current version.
-VERSION = "0.5.4"
+VERSION = "0.5.5"
 
 # Todo: Use for separating the file types as well.
 PATH_SEPARATOR = ";"
@@ -69,40 +69,58 @@ file_types = ["*"]
 parser = argparse.ArgumentParser(description="Rename files")
 parser.add_argument("args")
 
-parser.add_argument("-n",
-                    "--dry-run",
-                    action="store_true")
+parser.add_argument("-n"
+                    , "--dry-run"
+                    , action="store_true"
+                    , help="Does everything except perform the renaming. Used\
+                      for testing.")
 
 parser.add_argument("--version",
                     action="version",
-                    version=f"{PRODUCT} {VERSION}")
+                    version=f"{PRODUCT} {VERSION}",
+                    help="Displays Lemony's version.")
 
-parser.add_argument("--debug",
-                    action="store_true")
+parser.add_argument("-m"
+                    , "--match-pattern"
+                    , action=MatchPatternAction
+                    , help="Specifies the regex pattern used to match files.")
 
-parser.add_argument("-m",
-                    "--match-pattern",
-                    action=MatchPatternAction)
+parser.add_argument("-r"
+                    , "--replace-pattern"
+                    , default=None
+                    , help="Specifies the replacement string for matching \
+                      files.")
 
-parser.add_argument("-r",
-                    "--replace-pattern",
-                    default=None)
+parser.add_argument("-p"
+                    , "--profile"
+                    , default=None
+                    , help="Selects the saved profile to use for the \
+                      renaming process.")
 
-parser.add_argument("-p",
-                    "--profile",
-                    default=None)
+parser.add_argument("-x"
+                    , "--ext"
+                    , default=None
+                    , help="Specifies which extensions are to be \
+                      included from the search. The specified extensions \
+                      are excluded from the search if the 'blacklist' \
+                      switch is active.")
 
-parser.add_argument("-x",
-                    "--ext",
-                    default=None)
+parser.add_argument("--blacklist"
+                    , action="store_true"
+                    , default=False
+                    , help="Excludes files based on extension rather than \
+                      includes based on its extension.")
 
-parser.add_argument("--blacklist",
-                    action="store_true",
-                    default=False)
+parser.add_argument("--debug"
+                    , action="store_true"
+                    , help="Displays light information for debugging or\
+                      troubleshooting.")
 
 parser.add_argument("--verbose"
-                    ,action="store_true"
-                    ,default=False)
+                    , action="store_true"
+                    , default=False
+                    , help="Displays verbose information about the procedure \
+                      the 'debug' switch toggled when this switch is active.")
 
 subparsers = parser.add_subparsers()
 
@@ -118,7 +136,7 @@ subparsers = parser.add_subparsers()
 #                         against without affecting files.")
 
 subparsers.add_parser("list"
-                      , help="")
+                      , help=f"Displays a list of external files used by {PRODUCT}.")
 
 
 args = parser.parse_args()
