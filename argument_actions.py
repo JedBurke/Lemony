@@ -7,12 +7,7 @@ class MatchPatternAction(argparse.Action):
         if nargs is not None:
             raise ValueError("nargs not allowed")
 
-        super(MatchPatternAction
-              , self
-              ).__init__(option_strings
-                         , dest
-                         , **kwargs
-                         )
+        super(MatchPatternAction, self).__init__(option_strings, dest, **kwargs)
 
     def __call__(self, parser, namespace, values, option_string=None):
         values = PatternHelpers.parse_regex(values)

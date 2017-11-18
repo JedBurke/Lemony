@@ -1,8 +1,10 @@
 import argparse
-from glob import glob
+#from glob import glob
 import io
 import json
 import os
+import logging
+from logging import Logger
 from os import path
 from os.path import join
 from pathlib import Path
@@ -10,6 +12,7 @@ import re
 import sys
 from colorama import init, Fore, Back, Style
 
+from directory_manager import DirectoryManager
 from helpers import FileHelpers, PatternHelpers
 from argument_actions import *
 
@@ -21,7 +24,7 @@ init(autoreset=True)
 PRODUCT = "Lemony"
 
 # The project's current version.
-VERSION = "0.5.5"
+VERSION = "0.5.6"
 
 # Todo: Use for separating the file types as well.
 PATH_SEPARATOR = ";"
@@ -51,6 +54,13 @@ blacklist_ext = False
 # The list of directories which to scan for files matching the regex.
 directory_list = []
 
+logging.basicConfig(
+    format='%(asctime)s - %(levelname)s > %(message)s',
+    filename='logs/log.txt',
+    level=logging.DEBUG
+)
+
+directory_manager = DirectoryManager()
 
 ####### TODO #######
 # 1. Allow globbing the directories.
@@ -69,58 +79,71 @@ file_types = ["*"]
 parser = argparse.ArgumentParser(description="Rename files")
 parser.add_argument("args")
 
-parser.add_argument("-n"
-                    , "--dry-run"
-                    , action="store_true"
-                    , help="Does everything except perform the renaming. Used\
-                      for testing.")
+parser.add_argument(
+    "-n",
+    "--dry-run",
+    action="store_true",
+    help="Does everything except perform the renaming. Used for testing."
+)
 
-parser.add_argument("--version",
-                    action="version",
-                    version=f"{PRODUCT} {VERSION}",
-                    help="Displays Lemony's version.")
+parser.add_argument(
+    "--version",
+    action="version",
+    version=f"{PRODUCT} {VERSION}",
+    help="Displays Lemony's version."
+)
 
-parser.add_argument("-m"
-                    , "--match-pattern"
-                    , action=MatchPatternAction
-                    , help="Specifies the regex pattern used to match files.")
+parser.add_argument(
+    "-m",
+    "--match-pattern",
+    action=MatchPatternAction,
+    help="Specifies the regex pattern used to match files."
+)
 
-parser.add_argument("-r"
-                    , "--replace-pattern"
-                    , default=None
-                    , help="Specifies the replacement string for matching \
-                      files.")
+parser.add_argument(
+    "-r",
+    "--replace-pattern",
+    default=None,
+    help="Specifies the replacement string for matching files."
+)
 
-parser.add_argument("-p"
-                    , "--profile"
-                    , default=None
-                    , help="Selects the saved profile to use for the \
-                      renaming process.")
+parser.add_argument(
+    "-p",
+    "--profile",
+    default=None,
+    help="Selects the saved profile to use for the renaming process."
+)
 
-parser.add_argument("-x"
-                    , "--ext"
-                    , default=None
-                    , help="Specifies which extensions are to be \
-                      included from the search. The specified extensions \
-                      are excluded from the search if the 'blacklist' \
-                      switch is active.")
+parser.add_argument(
+    "-x",
+    "--ext",
+    default=None,
+    help="Specifies which extensions are to be included from the \
+    search. The specified extensions are excluded from the search \
+    if the 'blacklist' switch is active."
+)
 
-parser.add_argument("--blacklist"
-                    , action="store_true"
-                    , default=False
-                    , help="Excludes files based on extension rather than \
-                      includes based on its extension.")
+parser.add_argument(
+    "--blacklist",
+    action="store_true",
+    default=False,
+    help="Excludes files based on extension rather than \
+    includes based on its extension."
+)
 
-parser.add_argument("--debug"
-                    , action="store_true"
-                    , help="Displays light information for debugging or\
-                      troubleshooting.")
+parser.add_argument(
+    "--debug",
+    action="store_true",
+    help="Displays light information for debugging or troubleshooting."
+)
 
-parser.add_argument("--verbose"
-                    , action="store_true"
-                    , default=False
-                    , help="Displays verbose information about the procedure \
-                      the 'debug' switch toggled when this switch is active.")
+parser.add_argument(
+    "--verbose",
+    action="store_true",
+    default=False,
+    help="Displays verbose information about the procedure \
+    the 'debug' switch toggled when this switch is active."
+)
 
 subparsers = parser.add_subparsers()
 
@@ -135,13 +158,16 @@ subparsers = parser.add_subparsers()
 #                       , help="Provides methods to test the match patterns \
 #                         against without affecting files.")
 
-subparsers.add_parser("list"
-                      , help=f"Displays a list of external files used by {PRODUCT}.")
+subparsers.add_parser(
+    "list",
+    help=f"Displays a list of external files used by {PRODUCT}."
+)
 
 
 args = parser.parse_args()
 
-directory_list = args.args.split(PATH_SEPARATOR)
+# directory_list = args.args.split(PATH_SEPARATOR)
+directory_manager.add(args.args.split(PATH_SEPARATOR))
 
 if args.debug:
     debug = True
@@ -229,7 +255,8 @@ if user_config.exists():
         regex_pattern = PatternHelpers.parse_regex(regex_pattern)
 
     if "dir" in profile:
-        directory_list.extend(profile["dir"])
+        #directory_list.extend(profile["dir"])
+        directory_manager.add(profile["dir"])
 
     if "whitelist" in profile:
         blacklist_ext = not profile["whitelist"]
@@ -238,15 +265,10 @@ if user_config.exists():
         blacklist_ext = False
 
     if debug:
-        # print(Fore.CYAN + f"Name: \"{profile_str}\"")
         print(Fore.CYAN + "Name: " + Fore.RESET + profile_str)
-        # print(Fore.CYAN + f"Match: \"{regex_pattern}\"")
         print(Fore.CYAN + "Match: " + Fore.RESET + regex_pattern.pattern)
-        # print(Fore.CYAN + f"Replace: \"{regex_replace}\"")
         print(Fore.CYAN + "Replace: " + Fore.RESET + regex_replace)
-        # print(Fore.CYAN + f"Available extensions: \"{file_types}\"")
         print(Fore.CYAN + "Available extensions: " + Fore.RESET + f"{file_types}")
-        # print(Fore.CYAN + f"Whitelist extensions: {not blacklist_ext}")
         print(Fore.CYAN + "Whitelist extensions: " + Fore.RESET + f"{not blacklist_ext}")
 
     if "dir" in profile:
@@ -260,7 +282,12 @@ regex = regex_pattern
 if debug:
     print(Fore.CYAN + "Regex object: " + Fore.RESET + f"{regex}")
 
-for directory in directory_list:
+print("Directories:")
+for directory in directory_manager.list():
+    print(f"Directory: { directory }")
+
+exit()
+for directory in directory_manager.list():
     if directory == "":
         # Skip empty path. Used for profiles which contain the directory.
 
