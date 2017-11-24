@@ -2,6 +2,8 @@ import unittest
 import logging
 from glob import glob
 from pathlib import Path
+import os
+from os import path
 
 class PathObjectManager:
     def __init__(self):
@@ -70,7 +72,7 @@ class PathObjectManager:
                 # Glob the the current iterated item and iterate the list
                 # of globbed paths.
                 for globbed_path in glob(path):
-                    globbed_path = self.normalize_path(globbed_path)
+                    globbed_path = os.path.normpath(globbed_path)
 
                     # Runs the validation method if it exists.
                     valid_path = False
@@ -84,7 +86,7 @@ class PathObjectManager:
                     self.__paths.append(globbed_path)
 
             else:
-                path = self.normalize_path(path)
+                path = os.path.normpath(path)
 
                 valid_path = False
                 

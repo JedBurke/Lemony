@@ -4,6 +4,8 @@ from os.path import join
 from pathlib import Path
 from glob import glob
 
+import fnmatch
+
 from pathobject_manager import PathObjectManager
 
 class FileManager(PathObjectManager):
@@ -41,14 +43,29 @@ class FileManager(PathObjectManager):
                 files.extend(glob(join(directory, temp_extension)))
 
         else:
-            for file in os.listdir(directory):
-                path = Path(os.path.join(directory, file))
+            with os.scandir(directory) as it:
+                for entry in it:
+                    if entry.is_file():
+                        base = os.path.basename(entry.path)
+                        split = os.path.splitext(base)
+                        parts = len(split[1])
 
-                # Remove the leading "."" from the extension.
-                extension = path.suffix.casefold()[1:]
+                        if len(split) > 1 and parts > 0:
+                            extension = split[parts - 1][1:]
 
-                if extension != "*" and not extension in extensions:
-                    files.append(join(directory, file))
+                            if not extension in extensions:
+                                files.append(entry.path)
+
+            # for file in os.listdir(directory):
+            #     path = Path(os.path.join(directory, file))
+
+            #     # Remove the leading "."" from the extension.
+            #     extension = path.suffix.casefold()[1:]
+
+            #     if extension != "*" and not extension in extensions:
+            #         files.append(join(directory, file))
+
+            #return
 
         for file in files:
             super().add(file)
@@ -84,8 +101,8 @@ class FileManager(PathObjectManager):
 
 fm = FileManager()
 
-fm.whitelist = False
-fm.add_files("D:/documents", "7z")
+fm.whitelist = True
+fm.add_files("D:/documents")
 
 print("Files:")
 for f in fm.list():
