@@ -74,8 +74,7 @@ class DirectoryManager(object):
     Returns: A boolean of whether all specified paths were removed.
     """
     def remove(self, directory):
-        # Allow globbing.
-        return False
+        raise NotImplementedError
 
     """
     Completely clears the instance.

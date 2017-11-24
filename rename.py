@@ -282,11 +282,6 @@ regex = regex_pattern
 if debug:
     print(Fore.CYAN + "Regex object: " + Fore.RESET + f"{regex}")
 
-print("Directories:")
-for directory in directory_manager.list():
-    print(f"Directory: { directory }")
-
-exit()
 for directory in directory_manager.list():
     if directory == "":
         # Skip empty path. Used for profiles which contain the directory.
