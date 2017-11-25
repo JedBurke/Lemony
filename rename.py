@@ -84,42 +84,42 @@ parser.add_argument(
     "-n",
     "--dry-run",
     action="store_true",
-    help="simulates operation without actually doing it"
+    help="simulate operation without actually doing it"
 )
 
 parser.add_argument(
     "--version",
     action="version",
     version=f"{PRODUCT} {VERSION}",
-    help="displays Lemony's version"
+    help="display Lemony's version"
 )
 
 parser.add_argument(
     "-m",
     "--match-pattern",
     action=MatchPatternAction,
-    help="specifies the regex pattern used to match files"
+    help="specify the regex pattern used to match files"
 )
 
 parser.add_argument(
     "-r",
     "--replace-pattern",
     default=None,
-    help="specifies the replacement string for matching files"
+    help="specify the replacement string for matching files"
 )
 
 parser.add_argument(
     "-p",
     "--profile",
     default=None,
-    help="selects the saved profile to use for the renaming process"
+    help="select the saved profile to use for the renaming process"
 )
 
 parser.add_argument(
     "-x",
     "--ext",
     default=None,
-    help="specifies which extensions are to be included in the \
+    help="specify which extensions are to be included in the \
     search"
 )
 
@@ -127,14 +127,14 @@ parser.add_argument(
     "--blacklist",
     action="store_true",
     default=False,
-    help="excludes files based on extension rather than \
+    help="exclude files based on extension rather than \
     including them based on it"
 )
 
 parser.add_argument(
     "--debug",
     action="store_true",
-    help="displays light information for debugging or troubleshooting \
+    help="display light information for debugging or troubleshooting \
     purposes"
 )
 
@@ -142,7 +142,7 @@ parser.add_argument(
     "--verbose",
     action="store_true",
     default=False,
-    help="displays verbose information about the operation"
+    help="display verbose information about the operation"
 )
 
 subparsers = parser.add_subparsers()
