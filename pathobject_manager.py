@@ -66,6 +66,8 @@ class PathObjectManager:
 
         # Iterate through each item in the paths list.
         for path in paths_list:
+            path = os.path.normpath(path)
+            print(path)
             
             if glob_paths:
 

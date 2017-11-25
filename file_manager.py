@@ -33,7 +33,7 @@ class FileManager(PathObjectManager):
 
         return extension
 
-    def add_files(self, directory, included_extensions="*"):
+    def add(self, directory, included_extensions="*"):
         files = []
         extensions = []
 
@@ -63,17 +63,8 @@ class FileManager(PathObjectManager):
                             files.append(entry.path)
 
         for file in files:
-            super().add(file)
+            super().add(file, False)
 
 
     def is_valid_file(self, path):
-        return False
-
-fm = FileManager()
-
-fm.whitelist = False
-fm.add_files("D:/documents", ["7z", "idle"])
-
-print("Files:")
-for f in fm.list():
-    print(f)
+        return True

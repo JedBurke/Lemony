@@ -1,5 +1,4 @@
 import argparse
-#from glob import glob
 import io
 import json
 import os
@@ -13,6 +12,7 @@ import sys
 from colorama import init, Fore, Back, Style
 
 from directory_manager import DirectoryManager
+from file_manager import FileManager
 from helpers import FileHelpers, PatternHelpers
 from argument_actions import *
 
@@ -24,7 +24,7 @@ init(autoreset=True)
 PRODUCT = "Lemony"
 
 # The project's current version.
-VERSION = "0.5.6"
+VERSION = "0.6.0"
 
 # Todo: Use for separating the file types as well.
 PATH_SEPARATOR = ";"
@@ -61,6 +61,7 @@ logging.basicConfig(
 )
 
 directory_manager = DirectoryManager()
+file_manager = FileManager()
 
 ####### TODO #######
 # 1. Allow globbing the directories.
@@ -205,6 +206,9 @@ if args.ext is not None:
 # Extensions mentioned in the 'ext' list are to be excluded file types.
 blacklist_ext = args.blacklist
 
+# Sets whether to whitelist extensions or not.
+file_manager.whitelist = not blacklist_ext
+
 # Profiles are last since they overwrite all other arguments.
 if args.profile is not None:
     # Gets the profile path relative to the script.
@@ -307,33 +311,15 @@ for directory in directory_manager.list():
     # Files which have types specified in the 'file_types' list will be added
     # to the 'files' list. Conversely, if the 'blacklist' switch is active,
     # those files will not be added, but everything else will be added.
-    files = []
 
-    if blacklist_ext:
-        for file in os.listdir(directory):
-            f_obj = Path(os.path.join(directory, file))
-
-        if f_obj.is_file():
-            # Remove the leading "."" from the extension.
-            f_ext = f_obj.suffix.casefold()[1:]
-
-            if not (f_ext) in file_types:
-                print(file)
-
-    else:
-        for ext in file_types:
-            t_ext = ext
-
-            if not ext.startswith("*."):
-                t_ext = "*." + ext
-
-            files.extend(glob(join(directory, t_ext)))
+    file_manager.add(directory, file_types)
 
     if verbose:
-        for file in files:
+        for file in file_manager.list():
             print(Fore.CYAN + "Matching extension: " + Fore.RESET + file)
 
-    for file in files:
+    # for file in files:
+    for file in file_manager.list():
         file_name = Path(file).name
 
         # Perform a search to see if the file is eligible then do the replacement.
