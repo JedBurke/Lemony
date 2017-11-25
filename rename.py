@@ -24,7 +24,7 @@ init(autoreset=True)
 PRODUCT = "Lemony"
 
 # The project's current version.
-VERSION = "0.6.0"
+VERSION = "0.6.1"
 
 # Todo: Use for separating the file types as well.
 PATH_SEPARATOR = ";"
@@ -84,66 +84,65 @@ parser.add_argument(
     "-n",
     "--dry-run",
     action="store_true",
-    help="Does everything except perform the renaming. Used for testing."
+    help="simulates operation without actually doing it"
 )
 
 parser.add_argument(
     "--version",
     action="version",
     version=f"{PRODUCT} {VERSION}",
-    help="Displays Lemony's version."
+    help="displays Lemony's version"
 )
 
 parser.add_argument(
     "-m",
     "--match-pattern",
     action=MatchPatternAction,
-    help="Specifies the regex pattern used to match files."
+    help="specifies the regex pattern used to match files"
 )
 
 parser.add_argument(
     "-r",
     "--replace-pattern",
     default=None,
-    help="Specifies the replacement string for matching files."
+    help="specifies the replacement string for matching files"
 )
 
 parser.add_argument(
     "-p",
     "--profile",
     default=None,
-    help="Selects the saved profile to use for the renaming process."
+    help="selects the saved profile to use for the renaming process"
 )
 
 parser.add_argument(
     "-x",
     "--ext",
     default=None,
-    help="Specifies which extensions are to be included from the \
-    search. The specified extensions are excluded from the search \
-    if the 'blacklist' switch is active."
+    help="specifies which extensions are to be included in the \
+    search"
 )
 
 parser.add_argument(
     "--blacklist",
     action="store_true",
     default=False,
-    help="Excludes files based on extension rather than \
-    includes based on its extension."
+    help="excludes files based on extension rather than \
+    including them based on it"
 )
 
 parser.add_argument(
     "--debug",
     action="store_true",
-    help="Displays light information for debugging or troubleshooting."
+    help="displays light information for debugging or troubleshooting \
+    purposes"
 )
 
 parser.add_argument(
     "--verbose",
     action="store_true",
     default=False,
-    help="Displays verbose information about the procedure \
-    the 'debug' switch toggled when this switch is active."
+    help="displays verbose information about the operation"
 )
 
 subparsers = parser.add_subparsers()
