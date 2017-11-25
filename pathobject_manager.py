@@ -42,7 +42,8 @@ class PathObjectManager:
         else:
             return False        
 
-    """Replaces the Windows-specific path separator with the Unix-like one.
+    """
+    Replaces the Windows-specific path separator with the Unix-like one.
 
     Returns:
         String of the normalized path.
