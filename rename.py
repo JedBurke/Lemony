@@ -33,7 +33,7 @@ EXTENSION_SEPARATOR = ","
 
 PROFILES_FILE_NAME = "profiles.json"
 
-USER_DATA_DIR_NAME = "org.rename_data"
+USER_DATA_DIR_NAME = "org.lemony_data"
 
 # Prints certain values which the general user wouldn't need.
 debug = False
