@@ -22,6 +22,17 @@ class FileManager(PathObjectManager):
     def whitelist(self, value):
         self._whitelist = value
     
+    def get_extension(self, path):
+        base = os.path.basename(path)
+        parts = os.path.splitext(base)
+        
+        extension = ""
+
+        if len(parts) > 1:
+            extension = parts[len(parts) - 1][1:]
+
+        return extension
+
     def add_files(self, directory, included_extensions="*"):
         files = []
         extensions = []
@@ -46,63 +57,22 @@ class FileManager(PathObjectManager):
             with os.scandir(directory) as it:
                 for entry in it:
                     if entry.is_file():
-                        base = os.path.basename(entry.path)
-                        split = os.path.splitext(base)
-                        parts = len(split[1])
+                        extension = self.get_extension(entry.path)
 
-                        if len(split) > 1 and parts > 0:
-                            extension = split[parts - 1][1:]
-
-                            if not extension in extensions:
-                                files.append(entry.path)
-
-            # for file in os.listdir(directory):
-            #     path = Path(os.path.join(directory, file))
-
-            #     # Remove the leading "."" from the extension.
-            #     extension = path.suffix.casefold()[1:]
-
-            #     if extension != "*" and not extension in extensions:
-            #         files.append(join(directory, file))
-
-            #return
+                        if not extension in extensions:
+                            files.append(entry.path)
 
         for file in files:
             super().add(file)
 
-    # # Gather files.
-    # # Files which have types specified in the 'file_types' list will be added
-    # # to the 'files' list. Conversely, if the 'blacklist' switch is active,
-    # # those files will not be added, but everything else will be added.
-    # files = []
-
-    # if blacklist_ext:
-    #     for file in os.listdir(directory):
-    #         f_obj = Path(os.path.join(directory, file))
-
-    #     if f_obj.is_file():
-    #         # Remove the leading "."" from the extension.
-    #         f_ext = f_obj.suffix.casefold()[1:]
-
-    #         if not (f_ext) in file_types:
-    #             print(file)
-
-    # else:
-    #     for ext in file_types:
-    #         t_ext = ext
-
-    #         if not ext.startswith("*."):
-    #             t_ext = "*." + ext
-
-    #         files.extend(glob(join(directory, t_ext)))
 
     def is_valid_file(self, path):
         return False
 
 fm = FileManager()
 
-fm.whitelist = True
-fm.add_files("D:/documents")
+fm.whitelist = False
+fm.add_files("D:/documents", ["7z", "idle"])
 
 print("Files:")
 for f in fm.list():
