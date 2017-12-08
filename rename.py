@@ -11,8 +11,8 @@ import re
 import sys
 from colorama import init, Fore, Back, Style
 
-from directory_manager import DirectoryManager
-from file_manager import FileManager
+from modules.directory_manager import DirectoryManager
+from modules.file_manager import FileManager
 from helpers import FileHelpers, PatternHelpers
 from argument_actions import *
 

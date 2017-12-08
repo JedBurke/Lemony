@@ -6,7 +6,7 @@ from glob import glob
 
 import fnmatch
 
-from pathobject_manager import PathObjectManager
+from .pathobject_manager import PathObjectManager
 
 class FileManager(PathObjectManager):
     def __init__(self):
