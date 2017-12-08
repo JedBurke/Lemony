@@ -1,14 +1,14 @@
 ## Abandon all hope, ye who enter here
 
-This script is still in its infancy and is therefore subject to breaking or not doing what it's been designed to do.
+This script is still in its infancy and is therefore subject to breaking or not doing what it's been intended to do.
 
 ## Introduction
 
-Rename-py is a simple batch file renaming script written in Python 3.6. Its goal is to allow users to rename their files using regular expressions.
+Lemony is a simple batch file renaming script written in Python 3.6. Its goal is to allow users to rename their files using regular expressions.
 
 ## Getting Started
 
-For now, clone / download the repo and run `rename.py` with Python. As mentioned earlier, the script has been written targetting Python version 3.6.
+For now, clone / download the repo and run `lemony.py` with Python. As mentioned earlier, the script has been written targetting Python version 3.6.
 
 ### Usage
 
@@ -17,7 +17,7 @@ The following is an incomplete guide for using the script.
 #### Basic
 
 ```
-> rename.py "path/to/files" --match "_+" --replace " "
+> lemony.py "path/to/files" --match "_+" --replace " "
 ```
 
 What that does is rename all files in the specified directory, replacing the underscores (_) with a single space.
@@ -72,12 +72,12 @@ Invoke as such:
 > rename.py "path/to/files" --profile _2s
 ```
 
-You may also store a separate profile.json file in "~/org.rename\_data" / "%HOMEPATH%\org.rename\_data". The values from the local file will overwrite those of the main one.
+You may also store a separate profile.json file in "~/.lemony" / "%HOMEPATH%\.lemony". The values from the local file will override those of the main one.
 
 
 #### Need to know more?
 
-At this point in time, the script itself is your best friend in knowing how to use it.
+At this point in time, the script itself is better friend in knowing how to use it.
 
 ```
 > rename.py --help
@@ -87,16 +87,7 @@ At this point in time, the script itself is your best friend in knowing how to u
 
 The script was shoddily written with below-novice proficiency in Python. Ideally, I'd like to fix the shoddy bits and make the script more robust.
 
-* Fix shoddy bits
-* Check coding conventions
-* Further document code
-* Migrate to OOP
-* Employ unit testing
-* Employ passive logging
-
-**Features**
-
-* Allow pattern matching for the file names instead of relying on the extensions to filter the files
+Check issues with the "Quality of Life" label for more.
 
 ## Bugs
 

@@ -17,7 +17,8 @@ from helpers.pattern import PatternHelpers
 from helpers.file import FileHelpers
 from argument_actions import *
 
-from profile_subcommand import ProfileSubCommand
+# Side-line for now.
+# from profile_subcommand import ProfileSubCommand
 
 init(autoreset=True)
 
@@ -25,7 +26,7 @@ init(autoreset=True)
 PRODUCT = "Lemony"
 
 # The project's current version.
-VERSION = "0.6.3"
+VERSION = "0.6.5"
 
 # Todo: Use for separating the file types as well.
 PATH_SEPARATOR = ";"
