@@ -61,8 +61,6 @@ logging.basicConfig(
 )
 
 directory_manager = DirectoryManager()
-file_manager = FileManager()
-
 ####### TODO #######
 # 1. Allow globbing the directories.
 #   path/to/ecchi/*
@@ -205,9 +203,6 @@ if args.ext is not None:
 # Extensions mentioned in the 'ext' list are to be excluded file types.
 blacklist_ext = args.blacklist
 
-# Sets whether to whitelist extensions or not.
-file_manager.whitelist = not blacklist_ext
-
 # Profiles are last since they overwrite all other arguments.
 if args.profile is not None:
     # Gets the profile path relative to the script.
@@ -312,11 +307,12 @@ for directory in directory_manager.list():
     # is active, those files will not be added, but everything else
     # will be added.
 
-    # Clear the file manager as not to retain the older files from
-    # previous iterations.
-    file_manager.clear()
-    
-    file_manager.add(directory, file_types)
+    file_manager = FileManager()    
+    file_manager.add(
+        directory,
+        file_types,
+        not blacklist_ext
+    )
 
     if verbose:
         for file in file_manager.list():

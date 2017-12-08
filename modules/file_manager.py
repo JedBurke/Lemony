@@ -11,15 +11,15 @@ class FileManager(PathObjectManager):
     def __init__(self):
         super().__init__()
 
-        self.whitelist = True
+        # self.whitelist = True
         self.validation_function = self.is_valid_file
 
-    @property
-    def whitelist(self):
-        return self._whitelist
-    @whitelist.setter
-    def whitelist(self, value):
-        self._whitelist = value
+    # @property
+    # def whitelist(self):
+    #     return self._whitelist
+    # @whitelist.setter
+    # def whitelist(self, value):
+    #     self._whitelist = value
     
     def get_extension(self, path):
         base = os.path.basename(path)
@@ -32,7 +32,7 @@ class FileManager(PathObjectManager):
 
         return extension
 
-    def add(self, directory, included_extensions="*"):
+    def add(self, directory, included_extensions="*", whitelist=True):
         files = []
         extensions = []
 
@@ -43,7 +43,7 @@ class FileManager(PathObjectManager):
         else:
             extensions.append(included_extensions)
 
-        if self.whitelist:
+        if whitelist:
             for extension in extensions:
                 temp_extension = ""
 
