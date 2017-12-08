@@ -1,5 +1,5 @@
 import argparse
-from helpers import PatternHelpers
+from helpers.pattern import PatternHelpers
 
 
 class MatchPatternAction(argparse.Action):

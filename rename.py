@@ -13,7 +13,8 @@ from colorama import init, Fore, Back, Style
 
 from modules.directory_manager import DirectoryManager
 from modules.file_manager import FileManager
-from helpers import FileHelpers, PatternHelpers
+from helpers.pattern import PatternHelpers
+from helpers.file import FileHelpers
 from argument_actions import *
 
 from profile_subcommand import ProfileSubCommand
@@ -24,7 +25,7 @@ init(autoreset=True)
 PRODUCT = "Lemony"
 
 # The project's current version.
-VERSION = "0.6.2"
+VERSION = "0.6.3"
 
 # Todo: Use for separating the file types as well.
 PATH_SEPARATOR = ";"
