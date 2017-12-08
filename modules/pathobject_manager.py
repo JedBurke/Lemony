@@ -54,7 +54,7 @@ class PathObjectManager:
     """
     Adds a path to the manager instance.
     """
-    def add(self, path, glob_paths=True):
+    def add(self, path):
         paths_list = []
 
         # Tests if the passed path is a list. If it is, the paths_list
@@ -68,37 +68,16 @@ class PathObjectManager:
         # Iterate through each item in the paths list.
         for path in paths_list:
             path = os.path.normpath(path)
+
+            valid_path = False
             
-            if glob_paths:
-
-                # Glob the the current iterated item and iterate the list
-                # of globbed paths.
-                for globbed_path in glob(path):
-                    globbed_path = os.path.normpath(globbed_path)
-
-                    # Runs the validation method if it exists.
-                    valid_path = False
-                    
-                    if self.validation_function is not None:
-                        valid_path = self.validation_function(globbed_path)
-
-                    else:
-                        valid_path = True
-
-                    self.__paths.append(globbed_path)
+            if self.validation_function is not None:
+                valid_path = self.validation_function(path)
 
             else:
-                path = os.path.normpath(path)
+                valid_path = True
 
-                valid_path = False
-                
-                if self.validation_function is not None:
-                    valid_path = self.validation_function(path)
-
-                else:
-                    valid_path = True
-
-                self.__paths.append(path)
+            self.__paths.append(path)
 
 
     """

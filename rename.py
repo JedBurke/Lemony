@@ -307,15 +307,20 @@ for directory in directory_manager.list():
         continue
 
     # Gather files.
-    # Files which have types specified in the 'file_types' list will be added
-    # to the 'files' list. Conversely, if the 'blacklist' switch is active,
-    # those files will not be added, but everything else will be added.
+    # Files which have types specified in the 'file_types' list will be
+    # added to the 'files' list. Conversely, if the 'blacklist' switch 
+    # is active, those files will not be added, but everything else
+    # will be added.
 
+    # Clear the file manager as not to retain the older files from
+    # previous iterations.
+    file_manager.clear()
+    
     file_manager.add(directory, file_types)
 
     if verbose:
         for file in file_manager.list():
-            print(Fore.CYAN + "Matching extension: " + Fore.RESET + file)
+            print(Fore.CYAN + "Matching extension: " + Fore.RESET + Path(file).name)
 
     # for file in files:
     for file in file_manager.list():

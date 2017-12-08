@@ -1,12 +1,11 @@
+from modules.pathobject_manager import PathObjectManager
+
 import os
 from os import path
 from os.path import join
 from pathlib import Path
 from glob import glob
-
 import fnmatch
-
-from .pathobject_manager import PathObjectManager
 
 class FileManager(PathObjectManager):
     def __init__(self):
@@ -63,7 +62,7 @@ class FileManager(PathObjectManager):
                             files.append(entry.path)
 
         for file in files:
-            super().add(file, False)
+            super().add(file)
 
 
     def is_valid_file(self, path):
