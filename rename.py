@@ -24,7 +24,7 @@ init(autoreset=True)
 PRODUCT = "Lemony"
 
 # The project's current version.
-VERSION = "0.6.1"
+VERSION = "0.6.2"
 
 # Todo: Use for separating the file types as well.
 PATH_SEPARATOR = ";"
@@ -33,7 +33,7 @@ EXTENSION_SEPARATOR = ","
 
 PROFILES_FILE_NAME = "profiles.json"
 
-USER_DATA_DIR_NAME = "org.lemony_data"
+USER_DATA_DIR_NAME = ".lemony"
 
 # Prints certain values which the general user wouldn't need.
 debug = False

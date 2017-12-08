@@ -2,4 +2,5 @@ profiles.json
 logs/*
 tests/*
 __pycache__/*
+**.pyc
 
