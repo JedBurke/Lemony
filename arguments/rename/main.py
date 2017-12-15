@@ -135,8 +135,13 @@ class ArgRename(ArgumentBase):
         parser.set_defaults(func=self.args_entry)
 
     def parse_settings(self, args):
-        self.directory_manager.add(args.args.split(Constants.PATH_SEPARATOR))
-
+        # Todo: Fix bug where the directory won't be added.
+        self.directory_manager.add(
+            args.args.split(
+                Constants.PATH_SEPARATOR
+            )
+        )
+        
         if args.debug:
             self.debug = True
 
@@ -289,13 +294,13 @@ class ArgRename(ArgumentBase):
 
             print(Fore.YELLOW + f"\nEntering \"{directory}\":")
 
-            p = Path(directory)
+            directory_path = Path(directory)
 
-            if not p.exists():
+            if not directory_path.exists():
                 LogHelpers.print_error("Directory does not exist.")
                 continue
 
-            elif not p.is_dir():
+            elif not directory_path.is_dir():
                 LogHelpers.print_error("Skipping, not a directory.")
                 continue
 
@@ -316,8 +321,8 @@ class ArgRename(ArgumentBase):
                 for file in file_manager.list():
                     print(Fore.CYAN + "Matching extension:\n    " + Fore.RESET + Path(file).name)
 
-            # Create new line.
-            print()
+                # Create new line.
+                print()
 
             # for file in files:
             for file in file_manager.list():
