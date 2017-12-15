@@ -1,6 +1,7 @@
-profiles.json
+settings/*
 logs/*
-tests/*
+concepts/*
+main.py
 plugins/**
 __pycache__/*
 **.pyc

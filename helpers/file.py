@@ -1,17 +1,23 @@
 import re
 
 class FileHelpers():
-  """ Converts a string of directories to a list using pre-defined delimiters 
-      without checking the existence of said directories. """
+  """
+  Converts a string of directories to a list using pre-defined
+  delimiters without checking the existence of said directories.
+  """
   def parse_directories(directory_str, pattern=None):
     # Todo: Use the code from parse_extensions.
     return
 
 
-  """ Converts a string of extensions to a list 
-      using pre-defined delimiters. """
+  """
+  Converts a string of extensions to a list using pre-defined
+  delimiters.
+  """
   def parse_extensions(extension_str, pattern=None):
     WHITESPACE_SEPARATOR_REGEX = "\s?"
+
+    # Todo: Use constants.
     PATH_SEPARATOR = ";"
     EXTENSION_SEPARATOR = ","
 
@@ -32,3 +38,23 @@ class FileHelpers():
     strip_regex = None
 
     return ext_list
+
+  """
+  Opens and returns the contents of the file specified by the path in
+  "read" mode with the BOM set to UTF-8.
+
+  Returns:
+    String
+  """
+  def read_file(path):
+    contents = None
+
+    with open(
+        path,
+        encoding="utf-8-sig",
+        mode="r"
+    ) as file:
+        contents = file.read()
+    
+    return contents
+

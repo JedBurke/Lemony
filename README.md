@@ -12,7 +12,7 @@ For now, clone / download the repo and run `lemony.py` with Python. As mentioned
 
 ### Usage
 
-The following is an incomplete guide for using the script.
+The following is an incomplete guide for using the script. Please refer to the [Wiki](https://github.com/JedBurke/Lemony/wiki) for more.
 
 #### Basic
 
@@ -31,7 +31,7 @@ It's a good idea to test your replacement before it happens. Use the `--dry-run`
 To supply multiple directories, separate them with the semi-colon (;) character.
 
 ```
-> rename.py "path/to/directory;path/to/ecchi/pictures" -m "_" -r " "
+> lemony.py "path/to/directory;path/to/ecchi/pictures" -m "_" -r " "
 ```
 
 #### Extensions & Exclusions
@@ -39,7 +39,7 @@ To supply multiple directories, separate them with the semi-colon (;) character.
 You have a directory with multiple file types and don't want to apply the replacement on all of them. Use the `--ext` option to include the file types to be renamed. To keep it simple, we're using the semi-colon to separate the files extensions. Notice the comma.
 
 ```
-> rename "path" --ext "txt;srt,ass"
+> lemony.py "path" --ext "txt;srt,ass"
 ```
 
 In the case where you wish to allow all but exclude some, you'll use the `--blacklist` flag. All files will be processed except for those mention in the `--ext` argument.
@@ -48,7 +48,7 @@ In the case where you wish to allow all but exclude some, you'll use the `--blac
 
 The main reason why the script exists as it does now is to be able to reuse for other renaming purposes.
 
-"I may need to replace the underscores again, but I may need to replace other characters or do advanced text manipulation too."
+"I may need to replace the underscores again, but I may need to replace other characters or do advanced text manipulation too." That was the thought I had and the reason why it is more than just a one-off script.
 
 Simply put, profiles allow you to store and invoke commonly used operations. The profiles are contained in a JSON document under the name `profiles.json` in the main directory.
 
@@ -69,25 +69,28 @@ The profile stated in the above section matches the replacement operation perfor
 Invoke as such:
 
 ```
-> rename.py "path/to/files" --profile _2s
+> lemony.py "path/to/files" --profile _2s
 ```
 
 You may also store a separate profile.json file in "~/.lemony" / "%HOMEPATH%\.lemony". The values from the local file will override those of the main one.
 
+https://github.com/JedBurke/Lemony/wiki/Profiles
 
 #### Need to know more?
 
 At this point in time, the script itself is better friend in knowing how to use it.
 
 ```
-> rename.py --help
+> lemony.py --help
 ```
+
+
 
 ## Future
 
 The script was shoddily written with below-novice proficiency in Python. Ideally, I'd like to fix the shoddy bits and make the script more robust.
 
-Check issues with the "Quality of Life" label for more.
+Check issues with the ["Quality of Life"](https://github.com/JedBurke/Lemony/issues?q=is%3Aissue+is%3Aopen+label%3A%22quality+of+life%22) label for more.
 
 ## Bugs
 
