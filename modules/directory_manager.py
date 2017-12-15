@@ -1,9 +1,10 @@
 from .pathobject_manager import PathObjectManager
 
-from logging import logger
-from pathlib import path
+from glob import glob
+import logging
+from pathlib import Path
 
-class FileManager(PathObjectManager):
+class DirectoryManager(PathObjectManager):
     def __init__(self):        
         super().__init__()
 
