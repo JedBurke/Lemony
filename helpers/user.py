@@ -25,7 +25,7 @@ class UserHelpers:
         user_dir = path.expanduser(f"~/{Constants.USER_DATA_DIR_NAME}")
         norm_user_dir = path.normpath(user_dir)
 
-        return norm_user_dir
+        return Path(norm_user_dir)
 
     """
     Gets the path to the file which stores the user's rename

@@ -1,9 +1,9 @@
 import unittest
-from helpers.users import UserHelpers
+from helpers.user import UserHelpers
 
 class TestStringMethods(unittest.TestCase):
     def setUp(self):
-        self.print_vars = False
+        self.print_vars = True
         return
 
     def test_get_user_directory(self):
