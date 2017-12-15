@@ -1,8 +1,8 @@
 settings/*
 logs/*
 concepts/*
-main.py
-plugins/**
+./main.py
+plugins/*
 __pycache__/*
 **.pyc
 
