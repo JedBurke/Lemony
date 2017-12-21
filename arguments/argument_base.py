@@ -2,6 +2,7 @@ import argparse
 
 class ArgumentBase:
     def __init__(self):
+        #self.parent_parser = argparse.ArgumentParser()
         return
 
     @property
@@ -37,6 +38,22 @@ class ArgumentBase:
 
     def register(self):
         return
+
+    """
+    Creates and returns a new parser to be consumed by the sub-class.
+
+    Returns:
+
+    """
+    def get_parser(self, name, description=""):
+        parser = argparse.ArgumentParser(
+            name,
+            description
+        )
+
+        sub = parser.add_subparsers()
+
+        return sub
 
     def debug(self):
         if self.shortcode:

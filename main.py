@@ -2,7 +2,11 @@ from datetime import date
 import logging
 from logging import Logger
 from arguments.argument_factory import ArgumentFactory
-from arguments.rename.main import ArgRename
+
+from arguments.rename.main import RenameArgument
+from arguments.profile.main import ProfileArgument
+
+from project_globals import Globals
 
 # This is a proof-of-concept where the CLI arguments have been
 # decoupled from the main part of the application. It's far from
@@ -19,18 +23,38 @@ logging.basicConfig(
 )
 
 parser = ArgumentFactory.initiate_parser(
-    description="Rename files"
+    description=f"{Globals.PRODUCT} facilitates the renaming of \
+    files with the use of regular expressions."
 )
 
 subparser = parser.add_subparsers()
+
+# parser.add_argument("args")
+
+parser.add_argument(
+    "--version",
+    action="version",
+    version=Globals.get_version_str(),
+    help=f"display {Globals.PRODUCT_POSS} version"
+)
 
 # ArgRename largely consists of the original renaming logic which
 # was present in the application. In the future, ArgRename won't be
 # instantized as it is now, but via a plugin interface.
 
-ArgRename(subparser)
+logging.info("Load argument - Rename")
+
+#
+RenameArgument(subparser)
+ProfileArgument(subparser)
+
+# Prefer having the extension return its parser over handing over the
+# parser to it.
+
+# subparser.add_parser(ArgRename().register_parser())
 
 args = parser.parse_args()
+
 args.func(args)
 
 # Usage:

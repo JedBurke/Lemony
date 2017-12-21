@@ -5,7 +5,7 @@ from logging import Logger
 from ..argument_base import ArgumentBase
 from .match_pattern_action import MatchPatternAction
 
-from constants import Constants
+from project_globals import Globals
 from helpers.user import UserHelpers
 from helpers.file import FileHelpers
 from helpers.log import LogHelpers
@@ -23,15 +23,15 @@ import sys
 
 init(autoreset=True)
 
-class ArgRename(ArgumentBase):
+
+class RenameArgument(ArgumentBase):
     def __init__(self, parser):
         ArgumentBase.__init__(self)
 
-        self.parent_parser = parser
-
-        self.parser = self.parent_parser.add_parser(
+        self.parser = parser.add_parser(
             "rename",
-            help="renames files with regular expression patterns"
+            help="rename files in directories with regular \
+            expression-based patterns"
         )
 
         self.register(self.parser)
@@ -56,7 +56,7 @@ class ArgRename(ArgumentBase):
         self.directory_list = []
 
         self.regex_pattern = ""
-        
+
         self.regex_replace = ""
 
         self.file_types = ["*"]
@@ -78,7 +78,7 @@ class ArgRename(ArgumentBase):
             "-n",
             "--dry-run",
             action="store_true",
-            help="simulate operation without actually doing it"
+            help="simulate an operation without actually performing one"
         )
 
         parser.add_argument(
@@ -138,10 +138,10 @@ class ArgRename(ArgumentBase):
         # Todo: Fix bug where the directory won't be added.
         self.directory_manager.add(
             args.args.split(
-                Constants.PATH_SEPARATOR
+                Globals.PATH_SEPARATOR
             )
         )
-        
+
         if args.debug:
             self.debug = True
 
@@ -174,7 +174,6 @@ class ArgRename(ArgumentBase):
             if self.debug:
                 print(Fore.CYAN + f"Extension List: {file_types}")
 
-
         # Extensions mentioned in the 'ext' list are to be excluded file types.
         self.blacklist_ext = args.blacklist
 
@@ -189,9 +188,8 @@ class ArgRename(ArgumentBase):
                 profiles = json.loads(profile_content)
 
             else:
-                print(Fore.RED + "The profile configuration file cannot be found.")
+                print_error("The profile configuration file cannot be found.")
                 exit()
-
 
             # Gets the profile path relative to the script.
             # profile_path = path.join(sys.path[0], PROFILES_FILE_NAME)
@@ -219,8 +217,6 @@ class ArgRename(ArgumentBase):
 
             # user_config = UserHelpers.get_user_directory()
             user_profiles_path = UserHelpers.get_user_profiles_path()
-
-
 
             # Todo: Check if there was an indentation error in the
             # original script.
@@ -324,16 +320,20 @@ class ArgRename(ArgumentBase):
                 # Create new line.
                 print()
 
-            # for file in files:
+            has_no_match = False
+
             for file in file_manager.list():
                 file_name = Path(file).name
 
-                # Perform a search to see if the file is eligible then do the replacement.
-                # This is done not to pollute the console output.
+                # Perform a search to see if the file is eligible then do
+                # the replacement. This is done not to pollute the console
+                # output.
                 if regex.search(file_name) is None:
-                    if verbose:
+                    if self.verbose:
+                        has_no_match = True
+
                         print(
-                            Fore.CYAN + "No match: " + Fore.RESET + 
+                            Fore.CYAN + "No match:\n    " + Fore.RESET + 
                             Fore.RED + file_name
                         )
 
@@ -362,6 +362,10 @@ class ArgRename(ArgumentBase):
                     continue
 
                 else:
+                    if has_no_match:
+                        print()
+                        has_no_match = False
+
                     self.print_new_name(file_name, new_name)
 
                     self.rename(file, new_path, self.dry_run)

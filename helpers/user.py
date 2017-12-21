@@ -1,4 +1,4 @@
-from constants import Constants
+from project_globals import Globals
 import sys
 import os
 from os import path
@@ -22,7 +22,7 @@ class UserHelpers:
         Path-object
     """
     def get_user_directory():        
-        user_dir = path.expanduser(f"~/{Constants.USER_DATA_DIR_NAME}")
+        user_dir = path.expanduser(f"~/{Globals.USER_DATA_DIR_NAME}")
         norm_user_dir = path.normpath(user_dir)
 
         return Path(norm_user_dir)
@@ -37,7 +37,7 @@ class UserHelpers:
     def get_user_profiles_path():
         user_profiles_path = path.join(
             UserHelpers.get_user_directory(),
-            Constants.PROFILES_FILE_NAME
+            Globals.PROFILES_FILE_NAME
         )
 
         norm_user_profiles_path = path.normpath(user_profiles_path)
@@ -51,7 +51,7 @@ class UserHelpers:
     def get_system_directory():
         system_path = path.join(
             os.getcwd(),
-            Constants.SYSTEM_DATA_DIR_NAME
+            Globals.SYSTEM_DATA_DIR_NAME
         )
 
         return Path(system_path)
@@ -66,7 +66,7 @@ class UserHelpers:
     def get_profiles_path():
         profiles_path = path.join(
             UserHelpers.get_system_directory(),
-            Constants.PROFILES_FILE_NAME
+            Globals.PROFILES_FILE_NAME
         )
 
         norm_profiles_path = path.normpath(profiles_path)
