@@ -6,7 +6,7 @@ class Globals:
     PRODUCT_POSS = "Lemony's"
 
     # The project's current version.
-    VERSION = "0.7.0"
+    VERSION = "0.7.1"
 
     # Todo: Use for separating the file types as well.
     PATH_SEPARATOR = ";"
