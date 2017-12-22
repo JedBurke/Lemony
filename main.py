@@ -1,3 +1,4 @@
+import argparse
 from datetime import date
 import logging
 from logging import Logger
@@ -7,6 +8,7 @@ from arguments.rename.main import RenameArgument
 from arguments.profile.main import ProfileArgument
 
 from project_globals import Globals
+from arguments.user_init import InitializeUserConfig
 
 # This is a proof-of-concept where the CLI arguments have been
 # decoupled from the main part of the application. It's far from
@@ -38,6 +40,12 @@ parser.add_argument(
     help=f"display {Globals.PRODUCT_POSS} version"
 )
 
+# parser.add_argument(
+#     "--init-user-config",
+#     action=InitializeUserConfig,
+#     help="setup an empty user configuration environment"
+# )
+
 # ArgRename largely consists of the original renaming logic which
 # was present in the application. In the future, ArgRename won't be
 # instantized as it is now, but via a plugin interface.
@@ -55,7 +63,8 @@ ProfileArgument(subparser)
 
 args = parser.parse_args()
 
-args.func(args)
+if "func" in args:
+    args.func(args)
 
 # Usage:
 # > main.py rename "" --profile "goldenboy" -n --verbose
