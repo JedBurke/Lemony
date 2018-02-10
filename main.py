@@ -5,7 +5,6 @@ from logging import Logger
 from arguments.argument_factory import ArgumentFactory
 
 from arguments.rename.main import RenameArgument
-from arguments.profile.main import ProfileArgument
 
 from project_globals import Globals
 from arguments.user_init import InitializeUserConfig
@@ -54,7 +53,6 @@ logging.info("Load argument - Rename")
 
 #
 RenameArgument(subparser)
-ProfileArgument(subparser)
 
 # Prefer having the extension return its parser over handing over the
 # parser to it.
