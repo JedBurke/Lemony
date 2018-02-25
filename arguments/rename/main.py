@@ -191,38 +191,14 @@ class RenameArgument(ArgumentBase):
                 print_error("The profile configuration file cannot be found.")
                 exit()
 
-            # Gets the profile path relative to the script.
-            # profile_path = path.join(sys.path[0], PROFILES_FILE_NAME)
-
-            # if os.path.exists(profile_path):
-            #     with open(
-            #         profile_path,
-            #         encoding="utf-8-sig",
-            #         mode="r"
-            #     ) as profile_content_file:
-            #         profile_content = profile_content_file.read()
-
-            #     profiles = json.loads(profile_content)
-
-            # else:
-            #     print(Fore.RED + "The profile configuration file cannot be found.")
-            #     exit()
-
-            # user_config_path = path.join(
-            #     path.expanduser(f"~/{USER_DATA_DIR_NAME}"),
-            #     PROFILES_FILE_NAME
-            # )
-
-            # user_config = Path(user_config_path)
-
-            # user_config = UserHelpers.get_user_directory()
             user_profiles_path = UserHelpers.get_user_profiles_path()
 
             # Todo: Check if there was an indentation error in the
             # original script.
+            
+            # Instead of creating the directory, check if it exists and include
+            # it if it does.
             if user_profiles_path.exists():
-                # Instead of creating the directory, check if it exists and include
-                # it should if it does.
                 with open(
                     user_profiles_path,
                     encoding="utf-8-sig",
