@@ -221,7 +221,11 @@ class RenameArgument(ArgumentBase):
                 self.profile = profiles[profile_str]
                 self.regex_pattern = self.profile["match"]
                 self.regex_replace = self.profile["replace"]
-                self.file_types = self.profile["ext"]
+
+                if "ext" in self.profile:
+                    self.file_types = self.profile["ext"]
+                else:
+                    self.file_types = []
 
                 if self.regex_pattern is not None:
                     self.regex_pattern = PatternHelpers.parse_regex(self.regex_pattern)
