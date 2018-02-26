@@ -8,11 +8,13 @@ Lemony is a simple batch file renaming script written in Python 3.6. Its goal is
 
 ## Getting Started
 
-For now, clone / download the repo and run `lemony.py` with Python. As mentioned earlier, the script has been written targetting Python version 3.6.
+For now, clone / download the repo and run `main.py` with Python. As mentioned earlier, the script has been written targetting Python version 3.6.
 
 ### Usage
 
 The following is an incomplete guide for using the script. Please refer to the [Wiki](https://github.com/JedBurke/Lemony/wiki) for more.
+
+Replace `lemony.py` in the examples with `main.py`. The final entry-point is subject to change.
 
 #### Basic
 
