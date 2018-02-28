@@ -1,5 +1,6 @@
 import argparse
 from datetime import date
+from time import strftime
 import logging
 from logging import Logger
 from arguments.argument_factory import ArgumentFactory
@@ -14,11 +15,13 @@ from arguments.user_init import InitializeUserConfig
 # done, but in the future, the arguments will be taken from the
 # "arguments" directory and be dynamically consumed.
 
-date = date.today().strftime("%Y-%m-%d")
+date = strftime('%Y-%m-%d')
 log_path = f"settings/logs/log-{date}.txt"
 
+time = strftime('%H:%M:%S')
+
 logging.basicConfig(
-    format='%(asctime)s - %(levelname)s > %(message)s',
+    format=f"{time} - %(levelname)s > %(message)s",
     filename=log_path,
     level=logging.DEBUG
 )
@@ -44,6 +47,8 @@ parser.add_argument(
 #     action=InitializeUserConfig,
 #     help="setup an empty user configuration environment"
 # )
+
+logging.info("Starting " + Globals.get_version_str())
 
 # ArgRename largely consists of the original renaming logic which
 # was present in the application. In the future, ArgRename won't be
