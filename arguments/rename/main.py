@@ -160,13 +160,14 @@ class RenameArgument(ArgumentBase):
 
             if self.debug:
                 print(Fore.CYAN + "Match Pattern: "
-                      + Fore.RESET + f"{regex_pattern.pattern}")
+                      + Fore.RESET + self.regex_pattern.pattern)
 
         if args.replace_pattern is not None:
             self.regex_replace = args.replace_pattern
 
             if self.debug:
-                print(Fore.CYAN + f"Replace Pattern: {regex_replace}")
+                print(Fore.CYAN + "Replace Pattern: "
+                      + Fore.RESET + self.regex_replace)
 
         if args.ext is not None:
             self.file_types = FileHelpers.parse_extensions(args.ext)

@@ -33,7 +33,10 @@ class DirectoryManager(PathObjectManager):
             for directory in globbed_paths:
                 if self.is_valid_directory(directory):
                     processed_directories.append(directory)
-        
+                
+                # Todo: Log failure to add directory.
+
+
         super().add(processed_directories)
 
         # directory_list = []
